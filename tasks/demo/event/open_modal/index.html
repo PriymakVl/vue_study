@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue 3 Modal — Options API</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <button @click="openModal">Open modal</button>
+
+  <div v-if="showModal" class="modal">
+    <div class="modal-content">
+      <button class="close-button" @click="closeModal">×</button>
+      <p>Hello world!</p>
+    </div>
+  </div>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>

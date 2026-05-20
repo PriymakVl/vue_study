@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Сезоны года - Vue 3</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    .container {
+        width: 800px;
+        margin: 50px auto 0;
+        text-align: center;
+    }
+
+    #season {
+        width: 300px;
+        height: 40px;
+        font-size: 1.5rem;
+        padding-left: 20px;
+    }
+
+    .img-wrp {
+        width: 510px;
+        height: 340px;
+        padding: 10px;
+        border: solid 2px turquoise;
+        margin: 30px auto 0; 
+    }
+
+    .img-wrp img {
+        height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="container">
+    <h1>Сезоны года</h1>
+    
+    <select id="season" v-model="selectedImage">
+      <option value="img/winter.jpg">Зима</option>
+      <option value="img/spring.jpg">Весна</option>
+      <option value="img/summer.jpg">Лето</option>
+      <option value="img/outumn.jpg">Осень</option>
+    </select>
+
+    <div class="img-wrp">
+      <img :src="selectedImage" alt="Сезон">
+    </div>
+  </div>
+
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          selectedImage: 'img/winter.jpg'
+        };
+      }
+    });
+
+    app.mount('#app');
+  </script>
+</body>
+</html>

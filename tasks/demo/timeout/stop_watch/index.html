@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Vue 3 секундомер (Options API, CDN)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; display:flex; min-height:100dvh; align-items:center; justify-content:center; background:#f6f7f9; margin:0; }
+    .card { background:#fff; padding:24px; border-radius:16px; box-shadow:0 6px 24px rgba(0,0,0,.08); text-align:center; width: min(420px, 92vw); }
+    .time { font-variant-numeric: tabular-nums; font-size: clamp(32px, 8vw, 56px); letter-spacing: .5px; margin: 6px 0 18px; }
+    .btns { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+    button { padding:10px 16px; border-radius:12px; border:1px solid #e6e8ec; background:#fff; cursor:pointer; font-weight:600; text-transform:uppercase; }
+    button:hover { background:#f1f3f5; }
+    button:disabled { opacity:.5; cursor:not-allowed; }
+    .start { border-color:#16a34a; }
+    .stop  { border-color:#dc2626; }
+    .reset { border-color:#64748b; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="card">
+      <h1>Секундомер</h1>
+      <div class="time">{{ formatted }}</div>
+      <div class="btns">
+        <button class="start" @click="start" :disabled="running">start</button>
+        <button class="stop"  @click="stop"  :disabled="!running">stop</button>
+        <button class="reset" @click="reset" :disabled="running && elapsedMs === 0">reset</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          running: false,
+          elapsedMs: 0,      // накопленное время (мс)
+          startStamp: 0,     // performance.now() на момент старта/возобновления
+          rafId: null
+        };
+      },
+      computed: {
+        // 00:00.000
+        formatted() {
+          const ms = Math.floor(this.elapsedMs % 1000);
+          const totalSeconds = Math.floor(this.elapsedMs / 1000);
+          const s = totalSeconds % 60;
+          const m = Math.floor(totalSeconds / 60);
+          const pad = (n, w=2) => String(n).padStart(w, '0');
+          return `${pad(m)}:${pad(s)}.${pad(ms,3)}`;
+        }
+      },
+      methods: {
+        tick(now) {
+          // Обновляем прошедшее время относительно точки старта
+          this.elapsedMs = Math.max(0, now - this.startStamp);
+          this.rafId = requestAnimationFrame(this.tick);
+        },
+        start() {
+          if (this.running) return;
+          this.running = true;
+          // Продолжаем с уже накопленным временем (elapsedMs)
+          this.startStamp = performance.now() - this.elapsedMs;
+          this.rafId = requestAnimationFrame(this.tick);
+        },
+        stop() {
+          if (!this.running) return;
+          this.running = false;
+          cancelAnimationFrame(this.rafId);
+          this.rafId = null;
+          // фиксируем elapsedMs на момент остановки
+          this.elapsedMs = performance.now() - this.startStamp;
+        },
+        reset() {
+          // Сброс возможен в любой момент; если идёт отсчёт — сначала остановим
+          if (this.running) this.stop();
+          this.elapsedMs = 0;
+        }
+      },
+      mounted() {
+        // Привязываем this для requestAnimationFrame колбэка
+        this.tick = this.tick.bind(this);
+      },
+      beforeUnmount() {
+        if (this.rafId) cancelAnimationFrame(this.rafId);
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!-- При движении ползунка увеличивать или уменьшать размер шрифта текста
+Минимальный размер шрифта 16px
+Максимальный размер шрифта 96px -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Изменение размера шрифта</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+    }
+
+    .text-box {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+    }
+
+    input[type="range"] {
+      width: 300px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <h2>Увеличь или уменьшай размер текста</h2>
+
+  <label>
+    Размер шрифта: {{ fontSize }}px
+    <br>
+    <input type="range" v-model="fontSize" min="16" max="96">
+  </label>
+
+  <div class="text-box" :style="{ fontSize: fontSize + 'px' }">
+    Это изменяемый текст. 
+  </div>
+</div>
+
+<script>
+const app = Vue.createApp({
+  data() {
+    return {
+      fontSize: 24
+    };
+  }
+});
+
+app.mount('#app');
+</script>
+
+</body>
+</html>

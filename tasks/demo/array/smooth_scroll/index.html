@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue 3 Smooth Scroll</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: #333;
+      padding: 15px;
+      display: flex;
+      justify-content: center;
+    }
+    nav a {
+      color: white;
+      margin-right: 15px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    section {
+      height: 100vh;
+      padding-top: 60px;
+      font-size: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #section1 { background: lightcoral; }
+    #section2 { background: lightblue; }
+    #section3 { background: lightgreen; }
+  </style>
+</head>
+<body>
+<div id="app">
+  <nav>
+    <a v-for="link in links" 
+       :key="link.id" 
+       @click.prevent="scrollToSection(link.id)">
+      {{ link.text }}
+    </a>
+  </nav>
+
+  <section id="section1">Секция 1</section>
+  <section id="section2">Секция 2</section>
+  <section id="section3">Секция 3</section>
+</div>
+
+<script>
+const app = Vue.createApp({
+  data() {
+    return {
+      links: [
+        { id: 'section1', text: 'Секция 1' },
+        { id: 'section2', text: 'Секция 2' },
+        { id: 'section3', text: 'Секция 3' }
+      ]
+    };
+  },
+  methods: {
+    scrollToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }
+});
+
+app.mount('#app');
+</script>
+</body>
+</html>

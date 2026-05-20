@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Дни недели</title>
+  <!-- Vue 3 CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      border: 1px solid black;
+      padding: 15px;;
+    }
+    li {
+      padding: 5px 10px;
+      font-size: 18px;
+    }
+    .active {
+      font-weight: bold;
+      color: white;
+      background: #4CAF50;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h2>Дни недели:</h2>
+    <ul>
+      <li v-for="(day, index) in days" 
+          :key="index" 
+          :class="{ active: index === currentDay }">
+        {{ day }}
+      </li>
+    </ul>
+  </div>
+
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          days: [
+            'Воскресенье',
+            'Понедельник',
+            'Вторник',
+            'Среда',
+            'Четверг',
+            'Пятница',
+            'Суббота'
+          ],
+          currentDay: null
+        }
+      },
+      methods: {
+        setCurrentDay() {
+          this.currentDay = new Date().getDay()
+        }
+      },
+      mounted() {
+        this.setCurrentDay()
+      }
+    })
+
+    app.mount('#app')
+  </script>
+</body>
+</html>

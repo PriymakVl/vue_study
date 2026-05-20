@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Смена цвета текста</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    .text {
+      font-size: 28px;
+      font-weight: bold;
+      transition: color 0.5s ease;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="text" :style="{ color: currentColor }">
+      Этот текст будет менять цвет
+    </div>
+    <button @click="toggleScript">
+      {{ running ? "Остановить скрипт" : "Запустить скрипт" }}
+    </button>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          colors: ["red", "blue", "green", "orange", "purple"],
+          currentColor: "black",
+          index: 0,
+          intervalId: null,
+          running: false
+        }
+      },
+      methods: {
+        toggleScript() {
+          if (this.running) {
+            // Остановить скрипт
+            clearInterval(this.intervalId);
+            this.intervalId = null;
+            this.currentColor = "black";
+            this.running = false;
+          } else {
+            // Запустить скрипт
+            this.running = true;
+            this.index = 0;
+            this.currentColor = this.colors[this.index];
+            this.intervalId = setInterval(() => {
+              this.index = (this.index + 1) % this.colors.length;
+              this.currentColor = this.colors[this.index];
+            }, 2000);
+          }
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

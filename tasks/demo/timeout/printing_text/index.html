@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Эффект печатания текста</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    body {
+      font-family: monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-size: 40px;
+    }
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      background: black;
+      margin-left: 2px;
+      animation: blink 0.7s infinite;
+    }
+    @keyframes blink {
+      0%, 50%, 100% { opacity: 1; }
+      25%, 75% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div>
+      {{ displayedText }}<span class="cursor"></span>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          fullText: "Привет! Это эффект печатания текста.",
+          displayedText: "",
+          index: 0
+        }
+      },
+      mounted() {
+        this.typeText();
+      },
+      methods: {
+        typeText() {
+          if (this.index < this.fullText.length) {
+            this.displayedText += this.fullText[this.index];
+            this.index++;
+            setTimeout(this.typeText, 200); // задержка 200 мс
+          }
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

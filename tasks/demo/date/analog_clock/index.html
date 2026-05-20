@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Аналоговые часы с циферблатом</title>
+  <!-- Vue 3 -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    
+    .clock {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      position: relative;
+      margin: 40px auto;
+      background: url("clock_face.jpg") no-repeat center/cover;
+    }
+
+    .hand {
+      position: absolute;
+      bottom: 50%;
+      left: 50%;
+      transform-origin: bottom center;
+      transform: translateX(-50%) rotate(0deg);
+    }
+
+    .hour {
+      width: 8px;
+      height: 80px;
+      background: #000;
+      border-radius: 4px;
+    }
+
+    .minute {
+      width: 4px;
+      height: 110px;
+      background: #333;
+      border-radius: 2px;
+    }
+
+    .second {
+      width: 2px;
+      height: 130px;
+      background: red;
+      border-radius: 1px;
+    }
+
+    .center {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: #000;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="clock">
+      <div class="hand hour"   :style="{ transform: 'translateX(-50%) rotate(' + hourDeg + 'deg)' }"></div>
+      <div class="hand minute" :style="{ transform: 'translateX(-50%) rotate(' + minuteDeg + 'deg)' }"></div>
+      <div class="hand second" :style="{ transform: 'translateX(-50%) rotate(' + secondDeg + 'deg)' }"></div>
+      <div class="center"></div>
+    </div>
+  </div>
+
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          hourDeg: 0,
+          minuteDeg: 0,
+          secondDeg: 0,
+          timerId: null
+        }
+      },
+      methods: {
+        updateClock() {
+          const now = new Date()
+          const seconds = now.getSeconds()
+          const minutes = now.getMinutes()
+          const hours = now.getHours()
+
+          this.secondDeg = seconds * 6        // 360° / 60
+          this.minuteDeg = minutes * 6 + seconds * 0.1 // плавное движение
+          this.hourDeg = (hours % 12) * 30 + minutes * 0.5
+        }
+      },
+      mounted() {
+        this.updateClock()
+        this.timerId = setInterval(this.updateClock, 1000)
+      },
+      beforeUnmount() {
+        clearInterval(this.timerId)
+      }
+    })
+
+    app.mount('#app')
+  </script>
+</body>
+</html>

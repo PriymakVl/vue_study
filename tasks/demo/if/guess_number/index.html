@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Угадай число</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background: #f0f0f0;
+    }
+    #app {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input {
+      padding: 0.5rem;
+      width: 100%;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .message {
+      margin-top: 1rem;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h2>Угадай число от 1 до 100</h2>
+
+    <input type="number" v-model.number="guess" :disabled="gameOver" placeholder="Введите число" min="1" max="100" />
+
+    <button @click="makeGuess" :disabled="gameOver || guess === ''">Проверить</button>
+
+    <div class="message" v-if="message">{{ message }}</div>
+    <div class="message">Попыток: {{ attempts }} / {{ maxAttempts }}</div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          numberToGuess: Math.floor(Math.random() * 100) + 1,
+          guess: '',
+          attempts: 0,
+          maxAttempts: 10,
+          message: '',
+          gameOver: false,
+        };
+      },
+      methods: {
+        makeGuess() {
+          if (this.guess < 1 || this.guess > 100) {
+            this.message = 'Введите число от 1 до 100';
+            return;
+          }
+
+          this.attempts++;
+
+          if (this.guess === this.numberToGuess) {
+            this.message = `Поздравляем! Вы угадали число ${this.numberToGuess} за ${this.attempts} попыток!`;
+            this.gameOver = true;
+          } else if (this.attempts >= this.maxAttempts) {
+            this.message = `Игра окончена! Вы проиграли. Загаданное число было ${this.numberToGuess}.`;
+            this.gameOver = true;
+          } else if (this.guess < this.numberToGuess) {
+            this.message = 'Слишком маленькое число';
+          } else {
+            this.message = 'Слишком большое число';
+          }
+
+          this.guess = '';
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

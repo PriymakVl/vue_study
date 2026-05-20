@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Мигание текста</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    .text {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      transition: opacity 0.5s ease;
+    }
+    .hidden {
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="text" :class="{ hidden: !visible }">
+      Привет! Я появляюсь и исчезаю :)
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          visible: true
+        }
+      },
+      mounted() {
+        setInterval(() => {
+          this.visible = !this.visible;
+        }, 1000); // каждые 2 секунды переключаем состояние
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

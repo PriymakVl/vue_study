@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Счётчик символов</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+    }
+
+    textarea {
+      width: 300px;
+      height: 100px;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    .counter {
+      margin-top: 10px;
+    }
+
+    .warning {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <h2>Введите текст (максимум {{ maxChars }} символов)</h2>
+
+  <textarea v-model="text" :maxlength="maxChars"></textarea>
+
+  <div class="counter" :class="{ warning: remaining <= 0 }">
+    Введено: {{ text.length }} символов<br>
+    Осталось: {{ remaining }} символов
+  </div>
+</div>
+
+<script>
+const app = Vue.createApp({
+  data() {
+    return {
+      text: '',
+      maxChars: 10
+    };
+  },
+  computed: {
+    remaining() {
+      return this.maxChars - this.text.length;
+    }
+  }
+});
+
+app.mount('#app');
+</script>
+
+</body>
+</html>

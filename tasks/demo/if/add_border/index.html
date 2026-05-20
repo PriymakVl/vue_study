@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue 3 Border Check</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    input {
+      border: 2px solid #ccc;
+      padding: 8px;
+      outline: none;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <input 
+      type="text" 
+      v-model="text" 
+      @blur="checkLength"
+      :style="{ borderColor: borderColor }"
+      placeholder="Введите 6 символов"
+    >
+  </div>
+
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          text: '',
+          requiredLength: 6,
+          borderColor: '#ccc'
+        }
+      },
+      methods: {
+        checkLength() {
+          const actualLength = this.text.length;
+          if (actualLength === this.requiredLength) {
+            this.borderColor = 'green';
+          } else {
+            this.borderColor = 'red';
+          }
+        }
+      }
+    });
+
+    app.mount('#app');
+  </script>
+</body>
+</html>

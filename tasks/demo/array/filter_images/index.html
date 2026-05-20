@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue 3 Image Filter</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .buttons {
+      margin-bottom: 20px;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 15px;
+      border: none;
+      cursor: pointer;
+      background: #ccc;
+      border-radius: 5px;
+    }
+    button.active {
+      background: #333;
+      color: white;
+    }
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    img {
+      width: 200px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    #app {
+      background: rgb(120, 120, 35);
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="buttons">
+    <button 
+      v-for="cat in categories" 
+      :key="cat" 
+      :class="{ active: selectedCategory === cat }"
+      @click="selectedCategory = cat">
+      {{ cat }}
+    </button>
+  </div>
+
+  <div class="gallery">
+    <img 
+      v-for="img in filteredImages" 
+      :key="img.src" 
+      :src="img.src" 
+      :alt="img.category">
+  </div>
+</div>
+
+<script>
+const app = Vue.createApp({
+  data() {
+    return {
+      selectedCategory: 'Все',
+      categories: ['Все', 'Природа', 'Города', 'Животные'],
+      images: [
+        { src: 'https://placehold.co/200x150?text=Природа+1', category: 'Природа' },
+        { src: 'https://placehold.co/200x150?text=Природа+2', category: 'Природа' },
+        { src: 'https://placehold.co/200x150?text=Город+1', category: 'Города' },
+        { src: 'https://placehold.co/200x150?text=Город+2', category: 'Города' },
+        { src: 'https://placehold.co/200x150?text=Животные+1', category: 'Животные' },
+        { src: 'https://placehold.co/200x150?text=Животные+2', category: 'Животные' }
+      ]
+    }
+  },
+  computed: {
+    filteredImages() {
+      if (this.selectedCategory === 'Все') {
+        return this.images;
+      }
+      return this.images.filter(img => img.category === this.selectedCategory);
+    }
+  }
+});
+
+app.mount('#app');
+</script>
+</body>
+</html>

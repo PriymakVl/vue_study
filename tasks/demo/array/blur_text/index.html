@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Размытие букв</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .word {
+      display: flex;
+      gap: 10px;
+      font-size: 70px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .letter {
+      filter: blur(6px);
+      transition: filter 0.3s;
+      cursor: pointer;
+    }
+
+    .letter:hover {
+      filter: blur(0);
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <div class="word">
+    <span 
+      v-for="(letter, index) in letters" 
+      :key="index" 
+      class="letter">
+      {{ letter }}
+    </span>
+  </div>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script>
+  const { createApp } = Vue;
+
+  createApp({
+    data() {
+      return {
+        word: 'Пример'
+      };
+    },
+    computed: {
+      letters() {
+        return this.word.split('');
+      }
+    }
+  }).mount('#app');
+</script>
+
+</body>
+</html>

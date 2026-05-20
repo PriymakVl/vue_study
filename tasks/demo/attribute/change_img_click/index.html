@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue Miniatures</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <img :src="mainImage" alt="Главное изображение" class="main-img">
+
+    <div class="thumbnails">
+      <img v-for="(thumb, index) in thumbnails" :key="index" :src="thumb" @click="changeImage(thumb)">
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

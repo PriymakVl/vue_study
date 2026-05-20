@@ -1,0 +1,21 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.moving-box {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  transition: all 0.6s ease;
+  cursor: pointer;
+  position: absolute;
+  background-color: red;
+}

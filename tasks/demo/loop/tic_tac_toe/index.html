@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Крестики-нолики Vue 3</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f0f0f0;
+    }
+    #app {
+      text-align: center;
+    }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-template-rows: repeat(3, 100px);
+      gap: 5px;
+      margin: 20px auto;
+    }
+    .cell {
+      background: #fff;
+      border: 2px solid #333;
+      font-size: 2.5em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .cell.winner {
+      background: #9f9;
+    }
+    button {
+      padding: 8px 16px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>Крестики-нолики</h1>
+    <div class="board">
+      <div 
+        v-for="(cell, index) in board" 
+        :key="index" 
+        class="cell"
+        :class="{winner: winnerCombo.includes(index)}"
+        @click="makeMove(index)">
+        {{ cell }}
+      </div>
+    </div>
+    <h2 v-if="winner">🏆 Победитель: {{ winner }}</h2>
+    <h2 v-else-if="isDraw">🤝 Ничья!</h2>
+    <button @click="resetGame">🔄 Новая игра</button>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          board: Array(9).fill(""),
+          currentPlayer: "X",
+          winner: null,
+          winnerCombo: []
+        };
+      },
+      computed: {
+        isDraw() {
+          return this.board.every(cell => cell !== "") && !this.winner;
+        }
+      },
+      methods: {
+        makeMove(index) {
+          if (this.board[index] || this.winner || this.currentPlayer !== "X") return;
+          this.board[index] = "X";
+
+          if (this.checkWinner()) {
+            this.winner = "X";
+            return;
+          }
+
+          this.currentPlayer = "O";
+          setTimeout(this.computerMove, 500); // небольшой таймаут, как будто думает
+        },
+        computerMove() {
+          if (this.winner) return;
+
+          const emptyCells = this.board
+            .map((cell, i) => cell === "" ? i : null)
+            .filter(i => i !== null);
+
+          if (emptyCells.length === 0) return;
+
+          const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+          this.board[randomIndex] = "O";
+
+          if (this.checkWinner()) {
+            this.winner = "O";
+          } else {
+            this.currentPlayer = "X";
+          }
+        },
+        checkWinner() {
+          const combos = [
+            [0,1,2], [3,4,5], [6,7,8], // ряды
+            [0,3,6], [1,4,7], [2,5,8], // колонки
+            [0,4,8], [2,4,6]           // диагонали
+          ];
+          for (let combo of combos) {
+            const [a, b, c] = combo;
+            if (
+              this.board[a] &&
+              this.board[a] === this.board[b] &&
+              this.board[a] === this.board[c]
+            ) {
+              this.winnerCombo = combo;
+              return true;
+            }
+          }
+          return false;
+        },
+        resetGame() {
+          this.board = Array(9).fill("");
+          this.currentPlayer = "X";
+          this.winner = null;
+          this.winnerCombo = [];
+        }
+      }
+    }).mount("#app");
+  </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.square {
+    width: 200px;
+    height: 200px;
+    background-color: lightgray;
+    margin: 20px auto;
+    transition: background-color 0.3s;
+}
+
+button {
+    margin: 10px;
+    font-size: 20px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.red-btn {
+    color: red;
+}
+
+.blue-btn {
+    color: blue;
+}

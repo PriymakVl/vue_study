@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Vue3 — Выбор номера</title>
+
+<style>
+  body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+  }
+
+  /* ==== СТИЛИ SELECT ==== */
+  select {
+    padding: 10px 14px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 2px solid #4a90e2;
+    background: white;
+    cursor: pointer;
+    outline: none;
+    min-width: 180px;
+  }
+
+  .grid {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+  }
+
+  .square {
+    width: 100px;
+    height: 100px;
+    background-color: lightgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 5px;
+  }
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+  <select v-model="selected" @change="updateBlock">
+    <option disabled value="">Выберите номер</option>
+
+    <option
+      v-for="(_, index) in blocks"
+      :key="index"
+      :value="index"
+    >
+      {{ index + 1 }}
+    </option>
+
+    <option value="reset">Сбросить</option>
+  </select>
+
+  <div class="grid">
+    <div
+      v-for="(block, index) in blocks"
+      :key="index"
+      class="square"
+    >
+      {{ block }}
+    </div>
+  </div>
+
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+
+<script>
+const { createApp } = Vue;
+
+createApp({
+  data() {
+    return {
+      selected: '',
+      blocks: Array(5).fill('блок')
+    };
+  },
+
+  methods: {
+    updateBlock() {
+
+      if (this.selected === 'reset') {
+        this.blocks = this.blocks.map(() => 'блок');
+        return; // селект останется на "Сбросить"
+      }
+
+      const index = Number(this.selected);
+      this.blocks.splice(index, 1, index + 1);
+
+    }
+  }
+
+}).mount('#app');
+</script>
+
+</body>
+</html>

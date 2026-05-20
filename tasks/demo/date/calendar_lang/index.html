@@ -1,0 +1,76 @@
+!<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Мини-календарь</title>
+  <!-- Vue 3 CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .calendar {
+      display: inline-block;
+      padding: 15px;
+      border: 2px solid #4CAF50;
+      border-radius: 10px;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+    }
+    .calendar h2 {
+      margin: 5px 0;
+      font-size: 22px;
+      color: #333;
+    }
+    select {
+      margin-top: 10px;
+      padding: 5px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="calendar">
+      <h2>{{ weekday }}, {{ day }} {{ month }} {{ year }}</h2>
+      <select v-model="lang" @change="updateDate">
+        <option value="ru-RU">Русский</option>
+        <option value="uk-UA">Українська</option>
+        <option value="en-US">English</option>
+      </select>
+    </div>
+  </div>
+
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          lang: 'ru-RU',
+          weekday: '',
+          day: '',
+          month: '',
+          year: ''
+        }
+      },
+      methods: {
+        updateDate() {
+          const now = new Date()
+          this.weekday = now.toLocaleDateString(this.lang, { weekday: 'long' })
+          this.day = now.getDate()
+          this.month = now.toLocaleDateString(this.lang, { month: 'long' })
+          this.year = now.getFullYear()
+        }
+      },
+      mounted() {
+        this.updateDate()
+      }
+    })
+
+    app.mount('#app')
+  </script>
+</body>
+</html>

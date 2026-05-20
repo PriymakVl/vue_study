@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Сообщение сверху</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .message {
+      position: fixed;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #4caf50;
+      color: white;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-size: 18px;
+      transition: top 0.5s ease;
+      z-index: 1000;
+    }
+    .message.show {
+      top: 20px;
+    }
+    button {
+      margin: 40px;
+      padding: 10px 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <button @click="showMessage">Показать сообщение</button>
+
+    <div class="message" :class="{ show: visible }">
+      {{ text }}
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          visible: false,
+          text: 'Привет! Это сообщение исчезнет через 2 секунды.'
+        }
+      },
+      methods: {
+        showMessage() {
+          this.visible = true;
+          setTimeout(() => {
+            this.visible = false;
+          }, 2000);
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+.square {
+    width: 200px;
+    height: 200px;
+    background-color: lightgray;
+    margin: 20px auto;
+    transition: background-color 0.3s;
+  }
+
+  .button-container {
+    text-align: center;
+  }
+
+  button {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    color: white;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+  }
+
+  .red-btn {
+    background-color: #e74c3c;
+  }
+
+  .red-btn:hover {
+    background-color: #c0392b;
+  }
+
+  .blue-btn {
+    background-color: #3498db;
+  }
+
+  .blue-btn:hover {
+    background-color: #2980b9;
+  }

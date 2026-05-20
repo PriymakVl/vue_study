@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Формы с цветами и активной кнопкой</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    .shape {
+      width: 150px;
+      height: 150px;
+      margin: 20px auto;
+      transition: all 0.3s ease;
+    }
+
+    .square {
+      border-radius: 0;
+      background-color: #4CAF50; /* зелёный */
+    }
+
+    .circle {
+      border-radius: 50%;
+      background-color: #2196F3; /* синий */
+    }
+
+    .rectangle {
+      width: 200px;
+      height: 100px;
+      border-radius: 10px;
+      background-color: #FFEB3B; /* жёлтый */
+    }
+
+    button {
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      color: #333;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+      transition: color 0.3s ease, background-color 0.3s ease;
+    }
+
+    button.active {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div :class="['shape', currentShape]"></div>
+
+    <div style="text-align: center;">
+      <button
+        :class="{ active: currentShape === 'square' }"
+        @click="setShape('square')"
+      >Квадрат</button>
+
+      <button
+        :class="{ active: currentShape === 'circle' }"
+        @click="setShape('circle')"
+      >Круг</button>
+
+      <button
+        :class="{ active: currentShape === 'rectangle' }"
+        @click="setShape('rectangle')"
+      >Прямоугольник</button>
+    </div>
+  </div>
+
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          currentShape: 'square'
+        };
+      },
+      methods: {
+        setShape(shape) {
+          this.currentShape = shape;
+        }
+      }
+    });
+
+    app.mount('#app');
+  </script>
+</body>
+</html>

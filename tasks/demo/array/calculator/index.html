@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue 3 Calculator</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .calculator {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 220px;
+    }
+    input {
+      width: 100%;
+      font-size: 20px;
+      padding: 10px;
+      text-align: right;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+    }
+    button {
+      padding: 15px;
+      font-size: 18px;
+      border: none;
+      background: #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:active {
+      background: #bbb;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="calculator">
+    <input type="text" v-model="expression" readonly>
+    <div class="buttons">
+      <button v-for="btn in buttons" :key="btn" @click="onButtonClick(btn)">
+        {{ btn }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const app = Vue.createApp({
+  data() {
+    return {
+      expression: '',
+      buttons: ['7','8','9','/','4','5','6','*','1','2','3','-','0','.','=','+','C']
+    }
+  },
+  methods: {
+    onButtonClick(value) {
+      if (value === '=') {
+        try {
+          this.expression = eval(this.expression) || '';
+        } catch {
+          this.expression = 'Ошибка';
+        }
+      } else if (value === 'C') {
+        this.expression = '';
+      } else {
+        this.expression += value;
+      }
+    }
+  }
+});
+
+app.mount('#app');
+</script>
+</body>
+</html>

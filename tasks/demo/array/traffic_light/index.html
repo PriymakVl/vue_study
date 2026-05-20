@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Цветные круги</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    .container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 50px;
+    }
+    .circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: gray;
+      transition: background-color 0.3s;
+    }
+    .green { background-color: green; }
+    .yellow { background-color: yellow; }
+    .red { background-color: red; }
+    button {
+      display: block;
+      margin: 30px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="container">
+      <div
+        v-for="(circle, index) in 3"
+        :key="index"
+        class="circle"
+        :class="getColorClass(index)"
+      ></div>
+    </div>
+    <button @click="next">Следующий цвет</button>
+  </div>
+
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          activeIndex: 1, // средний круг активный по умолчанию
+          colors: ['green', 'yellow', 'red']
+        };
+      },
+      methods: {
+        getColorClass(index) {
+          if (index === this.activeIndex) {
+            return this.colors[this.activeIndex % this.colors.length];
+          }
+          return ''; // серый (по умолчанию в CSS)
+        },
+        next() {
+          // Деактивируем текущий, переходим к следующему
+          this.activeIndex = (this.activeIndex + 1) % 3;
+        }
+      }
+    });
+
+    app.mount('#app');
+  </script>
+</body>
+</html>

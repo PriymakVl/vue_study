@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue3 CDN: Анимация кругов</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+  <div id="app">
+    <div class="circle green" :style="{left: hover ? '25%' : '50%' }"></div>
+
+    <div class="circle blue" :style="{left: hover ? '75%' : '50%' }"></div>
+
+    <div class="circle red" @mouseenter="hover = true" @mouseleave="hover = false"></div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

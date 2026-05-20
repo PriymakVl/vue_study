@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Good Cheap Fast</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background: #f5f5f5;
+    }
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 200px;
+      margin: auto;
+    }
+    label {
+      background: #fff;
+      padding: 1rem;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: 0.2s;
+    }
+    input[type="checkbox"]:checked + span {
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="checkbox-group">
+      <label>
+        <input type="checkbox" v-model="good" @change="handleChange('good')">
+        <span>Good</span>
+      </label>
+
+      <label>
+        <input type="checkbox" v-model="cheap" @change="handleChange('cheap')">
+        <span>Cheap</span>
+      </label>
+
+      <label>
+        <input type="checkbox" v-model="fast" @change="handleChange('fast')">
+        <span>Fast</span>
+      </label>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          good: false,
+          cheap: false,
+          fast: false,
+        };
+      },
+      methods: {
+        handleChange(changed) {
+          const { good, cheap, fast } = this;
+
+          // Если все три активны — отключаем последний включённый
+          if (good && cheap && fast) {
+            if (changed === 'good') {
+              this.fast = false;
+            } else if (changed === 'cheap') {
+              this.good = false;
+            } else if (changed === 'fast') {
+              this.cheap = false;
+            }
+          }
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

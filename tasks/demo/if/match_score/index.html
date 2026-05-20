@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue 3 Игра до 3 очков</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #2c3e50;
+      color: white;
+      text-align: center;
+      padding-top: 50px;
+    }
+    .wrp {
+      width: 400px;
+      margin: 0 auto 30px;
+      display: flex;
+      justify-content: center;
+      background: rgb(171, 28, 28);
+      padding-bottom: 10px;
+    }
+    button {
+      font-size: 18px;
+      margin: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    .score {
+      font-size: 48px;
+      margin: 20px;
+    }
+    #winner {
+      margin-top: 20px;
+      font-size: 24px;
+      color: lightgreen;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="wrp">
+      <div>
+        <div class="score" :style="{ color: winner === 'p1' ? 'yellow' : 'white' }">{{ scoreP1 }}</div>
+        <button @click="addScore('p1')" :disabled="gameOver">+1 Игрок 1</button>
+      </div>
+      <div>
+        <div class="score" :style="{ color: winner === 'p2' ? 'yellow' : 'white' }">{{ scoreP2 }}</div>
+        <button @click="addScore('p2')" :disabled="gameOver">+1 Игрок 2</button>
+      </div>
+    </div>
+    <button @click="reset">Сброс</button>
+    <div id="winner">{{ message }}</div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          scoreP1: 0,
+          scoreP2: 0,
+          winScore: 3,
+          gameOver: false,
+          winner: '',
+          message: ''
+        };
+      },
+      methods: {
+        addScore(player) {
+          if (this.gameOver) return;
+
+          if (player === 'p1') {
+            this.scoreP1++;
+            if (this.scoreP1 === this.winScore) {
+              this.endGame('p1');
+            }
+          } else if (player === 'p2') {
+            this.scoreP2++;
+            if (this.scoreP2 === this.winScore) {
+              this.endGame('p2');
+            }
+          }
+        },
+        endGame(winner) {
+          this.gameOver = true;
+          this.winner = winner;
+          this.message = winner === 'p1' ? 'Победил первый игрок!!!' : 'Победил второй игрок!!!';
+        },
+        reset() {
+          this.scoreP1 = 0;
+          this.scoreP2 = 0;
+          this.gameOver = false;
+          this.winner = '';
+          this.message = '';
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
