@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="uk">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vue.js: Інтерполяція та Реактивність</title>
+
+  <!-- Prism.js CSS (Тема Okaidia для темного фона) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css">
+
+  <link rel="stylesheet" href="theory.css">
+</head>
+
+<body>
+  <header>
+    <div class="wrap hero">
+      <div>
+        <h1>Інтерполяція та Реактивність у Vue.js</h1>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- Секція 1: Інтерполяція -->
+    <section class="card" id="interpolation">
+      <h2>1. Інтерполяція</h2>
+      <p><b>Інтерполяція</b> — це спосіб виведення даних із Vue в HTML-шаблон за допомогою подвійних дужок
+        <code>{{ }}</code>.</p>
+
+      <div class="teacher">
+        <span class="teacher-title">Як це працює:</span>
+        <ul class="teacher-list">
+          <li>У HTML ми записуємо назву змінної у дужках: <code>{{ message }}</code>.</li>
+          <li>Значення змінної створюється та задається в блоці <code>data()</code>.</li>
+          <li>Vue автоматично підставляє значення цієї змінної замість дужок на сторінці.</li>
+          <li>Будь-яка зміна значення змінної одразу оновлює текст на екрані.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Секція 2: Реактивність -->
+    <section class="card" id="reactivity">
+      <h2>2. Реактивність</h2>
+      <p><b>Реактивність</b> — це автоматичне оновлення сторінки при зміні значення змінної.</p>
+
+      <div class="teacher">
+        <span class="teacher-title">Як це працює:</span>
+        <ul class="teacher-list">
+          <li>Змінні, оголошені в <code>data()</code>, стають <b>реактивними</b>.</li>
+          <li>При зміні такої змінної Vue автоматично перемальовує тільки потрібну частину сторінки.</li>
+          <li><b>Без реактивності</b> нам довелося б вручну шукати елемент через JavaScript і змінювати його текст
+            (наприклад, через <code>document.querySelector</code>).</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Prism.js Script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+</body>
+
+</html>

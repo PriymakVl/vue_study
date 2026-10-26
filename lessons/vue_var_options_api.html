@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vue.js — інтерактивний урок: Змінні у Vue (Options API)</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--ink:#2c3e50;--muted:#667085;--accent:#42b883;--accent2:#35495e;--line:#e6e8ef;--code:#1a2634;--warn:#fff7df}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+header{background:linear-gradient(135deg,#42b883,#35495e);color:#fff;padding:46px 20px}
+header h1, header .lead {text-shadow: 0 1px 3px rgba(0,0,0,0.3);}
+.wrap{max-width:1100px;margin:auto}.hero{display:grid;grid-template-columns:1.4fr .6fr;gap:28px;align-items:center}
+h1{font-size:clamp(32px,5vw,58px);line-height:1.03;margin:0 0 12px}.lead{font-size:19px;opacity:.95}
+.badge{display:inline-block;background:#ffffff22;border:1px solid #ffffff44;padding:7px 12px;border-radius:999px;margin:4px}
+nav{position:sticky;top:0;background:#ffffffee;backdrop-filter:blur(8px);z-index:3;border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:8px;overflow:auto;padding:10px 16px} nav a{white-space:nowrap;text-decoration:none;color:var(--ink);padding:8px 12px;border-radius:10px}nav a:hover{background:#e8f7f0}
+main{padding:28px 16px 60px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;margin:18px 0;box-shadow:0 7px 24px #1720330b}
+h2{margin-top:0;font-size:28px}h3{margin-bottom:8px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.note{background:#e8f7f0;border-left:5px solid var(--accent);padding:14px 16px;border-radius:10px}.teacher{background:var(--warn);border-left:5px solid #f4b400;padding:14px 16px;border-radius:10px}
+pre{background:var(--code);color:#f8f8f2;padding:17px;border-radius:13px;overflow:auto;font-size:15px;line-height:1.5}code{font-family:Consolas,monospace}
+table{width:100%;border-collapse:collapse}th,td{border-bottom:1px solid var(--line);padding:11px;text-align:left}th{background:#f8f8fc}
+.task{border:1px dashed #42b88388;border-radius:14px;padding:16px;margin:12px 0}.task strong{color:#35495e}
+textarea,input[type=text]{width:100%;border:1px solid #ccd0dc;border-radius:10px;padding:12px;font:inherit;margin:7px 0}
+button{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer;background:var(--accent);color:white}button.alt{background:var(--accent2);color:#fff}button.ghost{background:#eef0f5;color:#273043}
+.answer{display:none;margin-top:10px}.ok{color:#42b883;font-weight:700}.bad{color:#c92a2a;font-weight:700}
+details{border:1px solid var(--line);padding:12px 14px;border-radius:12px;margin:10px 0}summary{cursor:pointer;font-weight:700}
+.pill{font-size:13px;background:#e8f7f0;color:#42b883;padding:4px 9px;border-radius:999px}
+footer{text-align:center;color:var(--muted);padding:30px}
+@media(max-width:760px){.hero,.grid{grid-template-columns:1fr}.card{padding:18px}}
+</style>
+</head>
+<body>
+<header>
+<div class="wrap hero">
+  <div>
+    <h1>Змінні у Vue.js</h1>
+    <p class="lead">Повний інтерактивний урок: створення реактивних даних за допомогою Options API та відображення в HTML.</p>
+  </div>
+</div>
+</header>
+
+<nav><div class="wrap">
+<a href="#definition">Створення змінних</a><a href="#syntax">Правильний синтаксис</a><a href="#interpolation">Виведення ({{ }})</a><a href="#practice">Практика</a><a href="#test">Тест</a>
+</div></nav>
+
+<main class="wrap">
+
+<section class="card" id="definition">
+<h2>1. Створення та оголошення змінних у Vue (Options API)</h2>
+<p>У Vue.js (при використанні підходу <b>Options API</b>) всі реактивні змінні описуються всередині спеціальної функції <code>data()</code>, яка повертає об'єкт зі значеннями.</p>
+<pre><code>&lt;div id="app"&gt;
+  &lt;p&gt;{{ message }}&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+  const app = Vue.createApp({
+    data() {
+      return {
+        message: 'Привіт'
+      }
+    }
+  })
+  
+  app.mount('#app')
+&lt;/script&gt;</code></pre>
+<div class="teacher"><b>Пояснення:</b> Функція <code>data()</code> обов'язково повинна повертати об'єкт через <code>return { ... }</code>. Всі ключі цього об'єкта (наприклад, <code>message</code>) стають реактивними змінними, до яких можна звертатися в шаблоні HTML.</div>
+</section>
+
+<section class="card" id="syntax">
+<h2>2. Важливі синтаксичні правила та розбір помилок</h2>
+<p>Під час оголошення даних у Vue важливо дотримуватися правильного синтаксису JavaScript об'єктів:</p>
+
+<table>
+<tr><th>Елемент</th><th>Опис правила</th><th>Приклад</th></tr>
+<tr><td>Функція <code>data()</code></td><td>Повертає об'єкт <code>return { ... }</code> з даними.</td><td><code>data() { return { ... } }</code></td></tr>
+<tr><td>Розділювач пар</td><td>Усередині об'єкта ключі й значення розділяються двокрапкою <code>:</code>.</td><td><code>title: 'Vue'</code></td></tr>
+<tr><td>Коми між ключами</td><td>Всі поля об'єкта відокремлюються комами <code>,</code>.</td><td><code>name: 'Іван', age: 20</code></td></tr>
+<tr><td>Монтування <code>mount()</code></td><td>Прив'язує екземпляр Vue до HTML-елемента за його CSS-селектором.</td><td><code>app.mount('#app')</code></td></tr>
+</table>
+
+<h3 style="margin-top:20px;">Типові помилки початківців:</h3>
+<ol>
+  <li><b>Забутий <code>return</code>:</b> Якщо у <code>data()</code> не повернути об'єкт, Vue не побачить ваші змінні.</li>
+  <li><b>Синтаксичні дужки:</b> Закриття <code>data()</code> або <code>return</code> не у тому місці викликає синтаксичну помилку <code>SyntaxError</code>.</li>
+  <li><b>Забуте монтування:</b> Якщо не викликати <code>app.mount('#app')</code>, шаблон `{{ message }}` так і залишиться незмінним текстом на сторінці.</li>
+</ol>
+
+<div class="task"><strong>Інтерактивна перевірка імені змінної у Vue.</strong> Введіть назву змінної, щоб дізнатися, чи вона правильна для об'єкта <code>data()</code>:
+<input id="varNameInput" type="text" placeholder="Наприклад: userName">
+<button onclick="checkVarName()">Перевірити назву</button> 
+<span id="varNameResult"></span></div>
+</section>
+
+<section class="card" id="interpolation">
+<h2>3. Відображення змінних у шаблоні (Mustache / Інтерполяція)</h2>
+<p>Для того щоб вивести значення змінної в HTML-код, використовуються подвійні фігурні дужки <code>{{ }}</code> (їх часто називають "вусами" або Mustache-синтаксисом).</p>
+
+<pre><code>&lt;div id="app"&gt;
+  &lt;h1&gt;Товар: {{ product }}&lt;/h1&gt;
+  &lt;p&gt;Ціна: {{ price }} грн&lt;/p&gt;
+  &lt;p&gt;Загалом з урахуванням знижки: {{ price - 100 }} грн&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+
+<div class="note"><b>Зверніть увагу:</b> Усередині <code>{{ }}</code> можна виконувати найпростіші математичні обчислення або операції з рядками (наприклад, <code>{{ price * count }}</code> або <code>{{ message.toUpperCase() }}</code>).</div>
+</section>
+
+<section class="card" id="practice">
+<h2>4. Практичні завдання</h2>
+
+<div class="task"><strong>Завдання 1. Пошук синтаксичної помилки.</strong> 
+Знайдіть помилку в наступному коді оголошення Vue-додатку:
+<pre><code>data() {
+  return {
+  })
+}
+message: 'Привіт'</code></pre>
+<details><summary>Перевірити відповідь</summary>
+<p><b>Помилка:</b> Фігурна дужка та дужка <code>})</code> закривають об'єкт і функцію занадто рано, до того як оголошено поле <code>message</code>!</p>
+<p><b>Правильний варіант:</b></p>
+<pre><code>data() {
+  return {
+    message: 'Привіт'
+  }
+}</code></pre>
+</details></div>
+
+<div class="task"><strong>Завдання 2. Додавання кількох змінних.</strong> Додайте до об'єкта <code>data()</code> дві змінні: <code>product</code> зі значенням <code>'Телефон'</code> та <code>price</code> зі значенням <code>15000</code>.
+<details><summary>Показати код Vue</summary>
+<pre><code>const app = Vue.createApp({
+  data() {
+    return {
+      product: 'Телефон',
+      price: 15000
+    }
+  }
+})
+app.mount('#app')</code></pre>
+</details></div>
+</section>
+
+<section class="card" id="test">
+<h2>5. Міні-тест про змінні у Vue</h2>
+<p>1. Яка функція відповідає за створення реактивних змінних у Vue (Options API)?</p>
+<label><input type="radio" name="q1" value="a"> state()</label><br>
+<label><input type="radio" name="q1" value="b"> data()</label><br>
+<label><input type="radio" name="q1" value="c"> variables()</label>
+
+<p>2. За допомогою якого синтаксису значення змінної виводиться в HTML-шаблон?</p>
+<label><input type="radio" name="q2" value="a"> { message }</label><br>
+<label><input type="radio" name="q2" value="b"> {{ message }}</label><br>
+<label><input type="radio" name="q2" value="c"> &lt;message&gt;</label>
+
+<p>3. Що робить метод <code>app.mount('#app')</code>?</p>
+<label><input type="radio" name="q3" value="a"> Створює нову змінну</label><br>
+<label><input type="radio" name="q3" value="b"> Прив'язує додаток Vue до елемента з id="app"</label><br>
+<label><input type="radio" name="q3" value="c"> Видаляє екземпляр Vue з пам'яті</label><br><br>
+
+<button onclick="quiz()">Перевірити тест</button>
+<p id="quizResult"></p>
+</section>
+
+<section class="card">
+<h2>6. Чек-лист знань <span class="pill">checklist</span></h2>
+<label><input type="checkbox"> Розумію, що у Vue (Options API) змінні оголошуються у функції <code>data()</code></label><br>
+<label><input type="checkbox"> Пам'ятаю, що функція <code>data()</code> повинна повертати об'єкт через <code>return</code></label><br>
+<label><input type="checkbox"> Вмію виводити значення змінних у HTML за допомогою <code>{{ }}</code></label><br>
+<label><input type="checkbox"> Знаю, як правильно примонтувати додаток Vue до блоку за допомогою <code>.mount('#app')</code></label>
+</section>
+
+</main>
+
+<footer>Інтерактивний навчальний конспект • Vue.js: Змінні та Options API</footer>
+
+<script>
+function checkVarName() {
+  const input = document.getElementById('varNameInput').value.trim();
+  const res = document.getElementById('varNameResult');
+  
+  if (!input) {
+    res.textContent = 'Введіть назву!';
+    res.className = 'bad';
+    return;
+  }
+
+  const keywords = ["data", "methods", "computed", "props", "watch", "el", "template"];
+  
+  if (keywords.includes(input.toLowerCase())) {
+    res.textContent = '⚠ Застереження: ім\'я збігається із зарезервованим словом або опцією Vue!';
+    res.className = 'bad';
+    return;
+  }
+  
+  const validPattern = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/;
+  if (validPattern.test(input)) {
+    res.textContent = '✓ Чудово! Це правильна назва для ключа в data().';
+    res.className = 'ok';
+  } else {
+    if (/^[0-9]/.test(input)) {
+      res.textContent = '✗ Помилка: назва не може починатися з цифри!';
+    } else if (/\s/.test(input)) {
+      res.textContent = '✗ Помилка: пробіли заборонені!';
+    } else if (/-/.test(input)) {
+      res.textContent = '✗ Помилка: дефіси не рекомендуються в назвах властивостей JS!';
+    } else {
+      res.textContent = '✗ Помилка: використовуйте латинські літери, цифри, _ або $!';
+    }
+    res.className = 'bad';
+  }
+}
+
+function quiz() {
+  let score = 0;
+  const a = document.querySelector('input[name=q1]:checked');
+  const b = document.querySelector('input[name=q2]:checked');
+  const c = document.querySelector('input[name=q3]:checked');
+  
+  if(a && a.value === 'b') score++;
+  if(b && b.value === 'b') score++;
+  if(c && c.value === 'b') score++;
+  
+  const r = document.getElementById('quizResult');
+  r.textContent = 'Результат: ' + score + '/3' + (score === 3 ? ' — Відмінно!' : ' — Спробуйте ще раз!');
+  r.className = score === 3 ? 'ok' : 'bad';
+}
+</script>
+</body>
+</html>

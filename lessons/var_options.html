@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="uk">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vue.js: Змінні (Options API)</title>
+  
+  <!-- Prism.js CSS (Тема Okaidia для темного фона) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css">
+
+ <link rel="stylesheet" href="theory.css">
+</head>
+
+<body>
+  <header>
+    <div class="wrap hero">
+      <div>
+        <h1>Змінні у Vue.js (Options API)</h1>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <section class="card" id="definition">
+      <h2>1. Створення та ініціалізація змінної у Vue.js</h2>
+      <p>У <b>Vue.js (Options API)</b> всі реактивні змінні створюються всередині спеціальної функції
+        <code>data()</code>, яка повертає об'єкт із даними додатка.</p>
+
+      <pre><code class="language-html">&lt;div id="app"&gt;
+  &lt;p&gt;{{ message }}&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;script src="https://unpkg.com/vue@3/dist/vue.global.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  const app = Vue.createApp({
+    data() {
+      return {
+        message: 'Привіт!'
+      }
+    }
+  });
+
+  app.mount('#app');
+&lt;/script&gt;</code></pre>
+
+      <div class="teacher">
+        <span class="teacher-title">Пояснення з опису матеріалів:</span>
+        <ul class="teacher-list">
+          <li>Функція <code>data()</code> повертає об'єкт.</li>
+          <li>Кожна властивість цього об'єкта (наприклад, <code>message</code>) стає реактивною змінною, яку можна використовувати в HTML-шаблоні через підстановку <code>{{ message }}</code>.</li>
+          <li>Обов'язково викликається <code>app.mount('#app')</code> для зв'язування Vue з елементом DOM.</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Prism.js Script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+</body>
+
+</html>
