@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List - Vue Task (Конспект)</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+
+    <!-- Prism.js CSS (Тема Okaidia для подсветки синтаксиса Vue/HTML) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css">
+
+    <link rel="stylesheet" href="../../css/tasks.css">
+</head>
+<body>
+
+<div class="container my-5">
+    <!-- Заголовок -->
+    <h1 class="text-center mb-4">Todo List — Vue Task</h1>
+
+    <!-- Скриншот и Описание задания -->
+    <div class="row mb-4">
+        <div class="col-md-5 mb-3 mb-md-0">
+            <div class="screenshot-wrp text-center">
+                <img src="screenshots/todo_list.png" alt="Todo List Screenshot" class="img-fluid">
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title text-primary h4">Задание</h3>
+                    <ol class="task mb-3">
+                        <li>Написать скрипт для составления списка задач</li>
+                        <li>При клике по добавленной задаче она должна быть удалена из списка</li>
+                    </ol>
+                    <div class="d-flex flex-wrap gap-2 mt-auto">
+                        <a href="../../demo/form/todo_list/index.html" class="btn btn-outline-primary btn-sm">Демо</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="h3 mb-3 text-secondary">Решение задачи (Компоненты Vue)</h2>
+
+    <!-- Компонент: App.vue -->
+    <div class="card mb-3 component-card">
+        <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+                <h4 class="h5 mb-1 font-monospace">App.vue</h4>
+                <p class="text-muted mb-0 small">Главный компонент управления состоянием списка задач</p>
+            </div>
+            <button class="btn btn-primary btn-sm mt-2 mt-sm-0" onclick="toggleCode('code-app', this)">Показать код</button>
+        </div>
+        <div id="code-app" class="code-block px-3 pb-3">
+            <pre><code class="language-html">&lt;template&gt;
+  &lt;div class="container"&gt;
+    &lt;h1&gt;Список задач&lt;/h1&gt;
+    
+    &lt;TaskInput @add-task="addTask" /&gt;
+
+    &lt;ul&gt;
+      &lt;TaskItem 
+        v-for="(task, index) in tasks" 
+        :key="index" 
+        @remove="deleteTask(index)"
+      &gt;
+        {{ task }}
+      &lt;/TaskItem&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import TaskInput from './components/TaskInput.vue';
+import TaskItem from './components/TaskItem.vue';
+
+export default {
+  name: 'App',
+  components: {
+    TaskInput,
+    TaskItem
+  },
+  data() {
+    return {
+      tasks: []
+    };
+  },
+  methods: {
+    addTask(taskText) {
+      this.tasks.push(taskText);
+    },
+    deleteTask(index) {
+      this.tasks.splice(index, 1);
+    }
+  }
+};
+&lt;/script&gt;
+
+&lt;style&gt;
+.container {
+  width: 400px;
+  margin: 50px auto;
+  font-family: sans-serif;
+  text-align: center;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+&lt;/style&gt;</code></pre>
+        </div>
+    </div>
+
+    <!-- Компонент: TaskInput.vue -->
+    <div class="card mb-3 component-card">
+        <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+                <h4 class="h5 mb-1 font-monospace">components/TaskInput.vue</h4>
+                <p class="text-muted mb-0 small">Компонент ввода новой задачи и отправки события добавления</p>
+            </div>
+            <button class="btn btn-primary btn-sm mt-2 mt-sm-0" onclick="toggleCode('code-input', this)">Показать код</button>
+        </div>
+        <div id="code-input" class="code-block px-3 pb-3">
+            <pre><code class="language-html">&lt;template&gt;
+  &lt;div class="task-input"&gt;
+    &lt;input 
+      type="text" 
+      v-model="newTask" 
+      placeholder="Введите задачу"
+      @keyup.enter="submitTask"
+    &gt;
+    &lt;button @click="submitTask"&gt;Добавить&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  name: 'TaskInput',
+  emits: ['add-task'],
+  data() {
+    return {
+      newTask: ''
+    };
+  },
+  methods: {
+    submitTask() {
+      if (this.newTask.trim() !== '') {
+        this.$emit('add-task', this.newTask.trim());
+        this.newTask = '';
+      }
+    }
+  }
+};
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.task-input {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+input {
+  width: 65%;
+  padding: 8px;
+  font-size: 1rem;
+}
+
+button {
+  padding: 8px 12px;
+  font-size: 1rem;
+}
+&lt;/style&gt;</code></pre>
+        </div>
+    </div>
+
+    <!-- Компонент: TaskItem.vue -->
+    <div class="card mb-3 component-card">
+        <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+                <h4 class="h5 mb-1 font-monospace">components/TaskItem.vue</h4>
+                <p class="text-muted mb-0 small">Компонент отдельного элемента списка с обработчиком клика на удаление</p>
+            </div>
+            <button class="btn btn-primary btn-sm mt-2 mt-sm-0" onclick="toggleCode('code-item', this)">Показать код</button>
+        </div>
+        <div id="code-item" class="code-block px-3 pb-3">
+            <pre><code class="language-html">&lt;template&gt;
+  &lt;li @click="$emit('remove')"&gt;
+    &lt;slot&gt;&lt;/slot&gt;
+  &lt;/li&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  name: 'TaskItem',
+  emits: ['remove']
+};
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+li {
+  background-color: #f2f2f2;
+  padding: 10px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  text-align: left;
+}
+
+li:hover {
+  background-color: #e0e0e0;
+  text-decoration: line-through;
+}
+&lt;/style&gt;</code></pre>
+        </div>
+    </div>
+</div>
+
+<!-- Prism.js (Подсветка синтаксиса) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+
+<!-- Скрипт переключения видимости кода -->
+<script src="../../js/tasks.js"></script>
+
+</body>
+</html>
