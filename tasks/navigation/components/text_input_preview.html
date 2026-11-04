@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Input Preview - Vue Task (Конспект)</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+
+    <!-- Prism.js CSS (Тема Okaidia для подсветки синтаксиса Vue/HTML) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        .card {
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .screenshot-wrp img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .code-block {
+            display: none;
+            margin-top: 15px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        pre[class*="language-"] {
+            margin: 0;
+            border-radius: 6px;
+        }
+
+        .component-card {
+            border-left: 4px solid #42b883;
+            /* Vue Green */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container my-5">
+        <!-- Заголовок -->
+        <h1 class="text-center mb-4">Text Input Preview — Vue Task</h1>
+
+        <!-- Скриншот и Описание задания -->
+        <div class="row mb-4">
+            <div class="col-md-5 mb-3 mb-md-0">
+                <div class="screenshot-wrp text-center">
+                    <img src="screenshots/text_input.png" alt="Task Screenshot" class="img-fluid">
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="card-title text-primary h4">Задание</h3>
+                        <ol class="task mb-3">
+                            <li>Вывести вводимый текст в режиме реального времени в блоке предпросмотра главного
+                                компонента.</li>
+                        </ol>
+                        <div class="d-flex flex-wrap gap-2 mt-auto">
+                            <a href="../../demo/form/print_text/index.html"
+                                class="btn btn-outline-primary btn-sm">Демо</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="h3 mb-3 text-secondary">Решение задачи</h2>
+
+        <!-- Компонент: App.vue -->
+        <div class="card mb-3 component-card">
+            <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+                <div>
+                    <h4 class="h5 mb-1 font-monospace">App.vue</h4>
+                    <p class="text-muted mb-0 small">Главный компонент с блоком предпросмотра и связыванием состояния
+                    </p>
+                </div>
+                <button class="btn btn-primary btn-sm mt-2 mt-sm-0" onclick="toggleCode('code-app', this)">Показать
+                    код</button>
+            </div>
+            <div id="code-app" class="code-block px-3 pb-3">
+                <pre><code class="language-html">&lt;template&gt;
+  &lt;main id="app-card"&gt;
+    &lt;TextInput v-model="text" /&gt;
+    &lt;h3&gt;Вы ввели&lt;/h3&gt;
+    &lt;div class="preview-box"&gt;{{ text }}&lt;/div&gt;
+  &lt;/main&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import TextInput from './components/TextInput.vue';
+
+export default {
+  name: 'App',
+  components: {
+    TextInput
+  },
+  data() {
+    return {
+      text: ''
+    };
+  }
+};
+&lt;/script&gt;
+
+&lt;style&gt;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+#app-card {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  text-align: center;
+}
+
+.preview-box {
+  font-size: 18px;
+  color: #333;
+  border: 1px solid #999;
+  min-height: 100px;
+  text-align: left;
+  padding: 5px;
+  border-radius: 8px;
+}
+&lt;/style&gt;</code></pre>
+            </div>
+        </div>
+
+        <!-- Компонент: TextInput.vue -->
+        <div class="card mb-3 component-card">
+            <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+                <div>
+                    <h4 class="h5 mb-1 font-monospace">components/TextInput.vue</h4>
+                    <p class="text-muted mb-0 small">Компонент текстового поля ввода с эмитом событий</p>
+                </div>
+                <button class="btn btn-primary btn-sm mt-2 mt-sm-0" onclick="toggleCode('code-input', this)">Показать
+                    код</button>
+            </div>
+            <div id="code-input" class="code-block px-3 pb-3">
+                <pre><code class="language-html">&lt;template&gt;
+  &lt;input 
+    type="text" 
+    :value="modelValue"
+    @input="$emit('update:modelValue', $event.target.value)"
+    placeholder="Введите текст"
+  /&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  name: 'TextInput',
+  props: {
+    modelValue: {
+      type: String,
+      default: ''
+    }
+  },
+  emits: ['update:modelValue']
+};
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+input[type="text"] {
+  width: 90%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+&lt;/style&gt;</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prism.js (Подсветка синтаксиса) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+
+    <!-- Скрипт переключения видимости кода -->
+    <script>
+        function toggleCode(elementId, button) {
+            const codeBlock = document.getElementById(elementId);
+            if (codeBlock.style.display === "block") {
+                codeBlock.style.display = "none";
+                button.textContent = "Показать код";
+                button.classList.remove("btn-outline-secondary");
+                button.classList.add("btn-primary");
+            } else {
+                codeBlock.style.display = "block";
+                button.textContent = "Скрыть код";
+                button.classList.remove("btn-primary");
+                button.classList.add("btn-outline-secondary");
+            }
+        }
+    </script>
+
+</body>
+
+</html>
