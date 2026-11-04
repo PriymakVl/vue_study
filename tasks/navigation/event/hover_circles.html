@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hover Circles - Vue Task (Конспект)</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+
+    <!-- Prism.js CSS (Тема Okaidia для подсветки синтаксиса Vue/HTML/CSS/JS) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css">
+
+    <link rel="stylesheet" href="../../css/tasks.css">
+</head>
+<body>
+
+<div class="container my-5">
+    <!-- Заголовок -->
+    <h1 class="text-center mb-4">Hover Circles — Vue Task</h1>
+
+    <!-- Скриншот и Описание задания -->
+    <div class="row mb-4">
+        <div class="col-md-5 mb-3 mb-md-0">
+            <div class="screenshot-wrp text-center">
+                <img src="screenshots/hover_circles.png" alt="Hover Circles Screenshot" class="img-fluid">
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title text-primary h4">Задание</h3>
+                    <ol class="task mb-3">
+                        <li>Создать три наложенных друг на друга круглых блока (зеленый, синий и красный).</li>
+                        <li>При наведении курсора на верхний (красный) круг смещать зеленый круг влево, а синий — вправо.</li>
+                        <li>При уходе курсора с красного круга возвращать блоки в исходное центральное положение.</li>
+                    </ol>
+                    <div class="d-flex flex-wrap gap-2 mt-auto">
+                        <a href="../../demo/event/move_circle/index.html" class="btn btn-outline-primary btn-sm">Демо</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="h3 mb-3 text-secondary">Решение задачи</h2>
+
+    <!-- Разметка: index.html -->
+    <div class="card mb-3 component-card">
+        <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+                <h4 class="h5 mb-1 font-monospace">index.html</h4>
+                <p class="text-muted mb-0 small">Основная HTML-разметка страницы и привязка событий Vue (@mouseenter, @mouseleave)</p>
+            </div>
+            <button class="btn btn-primary btn-sm mt-2 mt-sm-0" onclick="toggleCode('code-html', this)">Показать код</button>
+        </div>
+        <div id="code-html" class="code-block px-3 pb-3">
+            <pre><code class="language-html">&lt;!doctype html&gt;
+&lt;html lang="ru"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+    &lt;title&gt;Hover Circles&lt;/title&gt;
+    &lt;link rel="stylesheet" href="style.css" /&gt;
+    &lt;script src="https://unpkg.com/vue@3/dist/vue.global.js"&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id="app"&gt;
+      &lt;div class="circle green"&gt;&lt;/div&gt;
+      &lt;div class="circle blue"&gt;&lt;/div&gt;
+      &lt;div
+        class="circle red"
+        @mouseenter="moveCircle(true)"
+        @mouseleave="moveCircle(false)"
+      &gt;&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;script src="main.js"&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        </div>
+    </div>
+
+    <!-- Стили: style.css -->
+    <div class="card mb-3 component-card">
+        <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+                <h4 class="h5 mb-1 font-monospace">style.css</h4>
+                <p class="text-muted mb-0 small">Стили позиционирования кругов и анимация переходов</p>
+            </div>
+            <button class="btn btn-primary btn-sm mt-2 mt-sm-0" onclick="toggleCode('code-css', this)">Показать код</button>
+        </div>
+        <div id="code-css" class="code-block px-3 pb-3">
+            <pre><code class="language-css">body {
+  background: black;
+}
+
+.circle {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: 1s;
+}
+
+.red {
+  background-color: red;
+}
+
+.green {
+  background-color: green;
+}
+
+.blue {
+  background-color: blue;
+}</code></pre>
+        </div>
+    </div>
+
+    <!-- Скрипт: main.js -->
+    <div class="card mb-3 component-card">
+        <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+                <h4 class="h5 mb-1 font-monospace">main.js</h4>
+                <p class="text-muted mb-0 small">Инициализация приложения Vue 3 и метод управления смещением элементов</p>
+            </div>
+            <button class="btn btn-primary btn-sm mt-2 mt-sm-0" onclick="toggleCode('code-js', this)">Показать код</button>
+        </div>
+        <div id="code-js" class="code-block px-3 pb-3">
+            <pre><code class="language-javascript">const app = Vue.createApp({
+    methods: {
+        moveCircle(isHover) {
+            document.querySelector(".green").style.left = isHover ? "25%" : "50%";
+            document.querySelector(".blue").style.left = isHover ? "75%" : "50%";
+        },
+    },
+});
+
+app.mount("#app");</code></pre>
+        </div>
+    </div>
+</div>
+
+<!-- Prism.js (Подсветка синтаксиса) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+
+<!-- Скрипт переключения видимости кода -->
+<script src="../../js/tasks.js"></script>
+
+</body>
+</html>

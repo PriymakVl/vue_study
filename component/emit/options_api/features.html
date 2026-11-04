@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue.js Emit — Важные особенности</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        vue: {
+                            green: '#42b883',
+                            dark: '#35495e',
+                            light: '#42d392'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-vue-green selection:text-white">
+
+    <!-- Navbar / Header -->
+    <header class="border-b border-slate-200 bg-white/90 backdrop-blur sticky top-0 z-50 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <svg class="h-8 w-8 text-vue-green" viewBox="0 0 128 128" fill="currentColor">
+                    <path fill="#42b883" d="M78.8,10L64,35.4L49.2,10H0l64,110l64-110H78.8z"/>
+                    <path fill="#35495e" d="M78.8,10L64,35.4L49.2,10H25.6L64,76l38.4-66H78.8z"/>
+                </svg>
+                <span class="font-bold text-lg tracking-tight text-slate-800">Vue.js - Важные особенности Emit</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full bg-white rounded-2xl shadow-sm border border-slate-200 my-6">
+        
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-vue-green font-bold font-mono shadow-sm">!</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Важные особенности Options API Emit</h2>
+            </div>
+            
+            <ul class="space-y-4 text-slate-600 leading-relaxed">
+                <li class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                    <span class="inline-block w-2.5 h-2.5 rounded-full bg-vue-green mt-2 shrink-0"></span>
+                    <div>
+                        События обеспечивают обратный поток данных (<strong>снизу вверх</strong>), сохраняя концепцию однонаправленного потока данных в архитектуре Vue.
+                    </div>
+                </li>
+                <li class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                    <span class="inline-block w-2.5 h-2.5 rounded-full bg-vue-green mt-2 shrink-0"></span>
+                    <div>
+                        Рекомендуется называть события в формате <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">kebab-case</code> (например, <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">update-user</code>) для единообразия с синтаксисом HTML-шаблонов.
+                    </div>
+                </li>
+                <li class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                    <span class="inline-block w-2.5 h-2.5 rounded-full bg-vue-green mt-2 shrink-0"></span>
+                    <div>
+                        Явное объявление в опции <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">emits</code> предотвращает попадание событий в качестве обычных атрибутов (<code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">$attrs</code>) на корневой элемент компонента.
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-400">
+        <p>Vue.js Emit Guide — Options API Edition</p>
+    </footer>
+
+</body>
+</html>

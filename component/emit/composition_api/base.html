@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue.js Использование Emit в Composition API</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Highlight.js Theme (Atom One Dark) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        vue: {
+                            green: '#42b883',
+                            dark: '#35495e',
+                            light: '#42d392'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        pre code.hljs {
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-vue-green selection:text-white">
+
+    <!-- Navbar / Header -->
+    <header class="border-b border-slate-200 bg-white/90 backdrop-blur sticky top-0 z-50 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <svg class="h-8 w-8 text-vue-green" viewBox="0 0 128 128" fill="currentColor">
+                    <path fill="#42b883" d="M78.8,10L64,35.4L49.2,10H0l64,110l64-110H78.8z"/>
+                    <path fill="#35495e" d="M78.8,10L64,35.4L49.2,10H25.6L64,76l38.4-66H78.8z"/>
+                </svg>
+                <span class="font-bold text-lg tracking-tight text-slate-800">Vue.js - Использование Emit в Composition API</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full bg-white rounded-2xl shadow-sm border border-slate-200 my-6">
+        
+        <!-- Section 1: Child Component -->
+        <section class="mb-12">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-vue-green font-bold font-mono shadow-sm">1</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Дочерний компонент (ChildComponent.vue)</h2>
+            </div>
+            <p class="text-slate-600 mb-4 leading-relaxed">
+                В Composition API при использовании синтаксиса <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">&lt;script setup&gt;</code> функция <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">emit</code> создаётся с помощью компилируемого макроса <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">defineEmits()</code>.
+            </p>
+            
+            <!-- Code Block -->
+            <div class="relative group my-4 shadow-lg rounded-xl overflow-hidden border border-slate-800">
+                <pre><code class="language-xml">&lt;!-- ChildComponent.vue --&gt;
+&lt;template&gt;
+  &lt;div class="child"&gt;
+    &lt;button @click="sendNotification"&gt;
+      Отправить данные родителю
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+// Объявляем возможные события с помощью макроса defineEmits
+const emit = defineEmits(['custom-event']);
+
+const sendNotification = () => {
+  // Генерируем событие 'custom-event' и передаём данные
+  emit('custom-event', {
+    id: 42,
+    message: 'Данные успешно отправлены из дочернего компонента!'
+  });
+};
+&lt;/script&gt;</code></pre>
+            </div>
+
+            <!-- Detailed Explanation List -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 mt-6">
+                <ul class="space-y-3 text-slate-700 text-sm sm:text-base">
+                    <li class="flex items-start gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full bg-vue-green mt-2 flex-shrink-0"></span>
+                        <div>
+                            <strong class="font-mono text-emerald-800">defineEmits(['custom-event'])</strong> — макрос компилятора (не требует импорта), объявляющий список эмитируемых событий. Возвращает эквивалент функции <code class="font-mono text-xs">$emit</code>.
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full bg-vue-green mt-2 flex-shrink-0"></span>
+                        <div>
+                            <strong class="font-mono text-emerald-800">emit('custom-event', payload)</strong> — вызванная функция генерирует событие:
+                            <ul class="list-disc pl-5 mt-1 space-y-1 text-slate-600">
+                                <li><strong>Первый параметр (<code class="font-mono text-xs">'custom-event'</code>)</strong> — имя события для отслеживания родителем.</li>
+                                <li><strong>Второй параметр (<code class="font-mono text-xs">{ id: 42, message: '...' }</code>)</strong> — объект или значение полезной нагрузки (payload).</li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 2: Parent Component -->
+        <section class="mb-12">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-vue-green font-bold font-mono shadow-sm">2</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Родительский компонент (ParentComponent.vue)</h2>
+            </div>
+            <p class="text-slate-600 mb-4 leading-relaxed">
+                Родительский компонент подключает дочерний через импорт, отслеживает событие с помощью directive <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">@custom-event</code> и сохраняет переданные данные в реактивную переменную <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">ref</code>.
+            </p>
+
+            <!-- Code Block -->
+            <div class="relative group my-4 shadow-lg rounded-xl overflow-hidden border border-slate-800">
+                <pre><code class="language-xml">&lt;!-- ParentComponent.vue --&gt;
+&lt;template&gt;
+  &lt;div class="parent"&gt;
+    &lt;!-- Подписываемся на событие @custom-event --&gt;
+    &lt;ChildComponent @custom-event="handleCustomEvent" /&gt;
+    
+    &lt;!-- Отображаем сообщение при его наличии --&gt;
+    &lt;p v-if="receivedMessage" class="message"&gt;
+      {{ receivedMessage }}
+    &lt;/p&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { ref } from 'vue';
+import ChildComponent from './ChildComponent.vue';
+
+const receivedMessage = ref('');
+
+const handleCustomEvent = (payload) => {
+  // payload содержит объект, переданный из функции emit
+  receivedMessage.value = payload.message;
+};
+&lt;/script&gt;</code></pre>
+            </div>
+
+            <!-- Detailed Explanation List -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 mt-6">
+                <ul class="space-y-3 text-slate-700 text-sm sm:text-base">
+                    <li class="flex items-start gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full bg-vue-green mt-2 flex-shrink-0"></span>
+                        <div>
+                            <strong class="font-mono text-emerald-800">import ChildComponent ...</strong> — в синтаксисе <code class="font-mono text-xs">&lt;script setup&gt;</code> импортированные компоненты автоматически становятся доступными в шаблоне без явной регистрации.
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full bg-vue-green mt-2 flex-shrink-0"></span>
+                        <div>
+                            <strong class="font-mono text-emerald-800">receivedMessage.value = payload.message</strong> — реактивная ссылка извлекается и изменяется через свое свойство <code class="font-mono text-xs">.value</code> внутри скрипта.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Highlighting Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            hljs.highlightAll();
+        });
+    </script>
+</body>
+</html>

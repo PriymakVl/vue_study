@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Block Selection - Vue Task (Конспект)</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+
+    <!-- Prism.js CSS (Тема Okaidia для подсветки синтаксиса Vue/HTML) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css">
+
+    <link rel="stylesheet" href="../../css/tasks.css">
+</head>
+<body>
+
+<div class="container my-5">
+    <!-- Заголовок -->
+    <h1 class="text-center mb-4">Block Selection — Vue Task</h1>
+
+    <!-- Скриншот и Описание задания -->
+    <div class="row mb-4">
+        <div class="col-md-5 mb-3 mb-md-0">
+            <div class="screenshot-wrp text-center">
+                <img src="screenshots/block_selection.png" alt="Task Screenshot" class="img-fluid">
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title text-primary h4">Задание</h3>
+                    <ol class="task mb-3">
+                        <li>Создать интерактивный список блоков с выбором номера через `select`.</li>
+                        <li>При выборе пункта менять значение соответствующего блока на его порядковый номер или сбрасывать все блоки к исходному состоянию.</li>
+                    </ol>
+                    <div class="d-flex flex-wrap gap-2 mt-auto">
+                        <a href="../../demo/components/block_selection/index.html" class="btn btn-outline-primary btn-sm">Демо</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="h3 mb-3 text-secondary">Решение задачи</h2>
+
+    <!-- Компонент: App.vue -->
+    <div class="card mb-3 component-card">
+        <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+                <h4 class="h5 mb-1 font-monospace">App.vue</h4>
+                <p class="text-muted mb-0 small">Главный компонент управления состоянием блоков и выбора</p>
+            </div>
+            <button class="btn btn-primary btn-sm mt-2 mt-sm-0" onclick="toggleCode('code-app', this)">Показать код</button>
+        </div>
+        <div id="code-app" class="code-block px-3 pb-3">
+            <pre><code class="language-html">&lt;template&gt;
+              &lt;main&gt;
+                &lt;NumberSelect
+                  v-model="selected"
+                  :total="blocks.length"
+                  @update-block="handleUpdateBlock"
+                /&gt;
+            
+                &lt;div class="grid"&gt;
+                  &lt;BlockSquare
+                    v-for="(block, index) in blocks"
+                    :key="index"
+                    :content="block"
+                  /&gt;
+                &lt;/div&gt;
+              &lt;/main&gt;
+            &lt;/template&gt;
+            
+            &lt;script&gt;
+            import NumberSelect from './components/NumberSelect.vue';
+            import BlockSquare from './components/BlockSquare.vue';
+            
+            export default {
+              name: 'App',
+              components: {
+                NumberSelect,
+                BlockSquare
+              },
+              data() {
+                return {
+                  selected: '',
+                  blocks: Array(5).fill('блок')
+                };
+              },
+              methods: {
+                handleUpdateBlock(val) {
+                  if (val === 'reset') {
+                    this.blocks = this.blocks.map(() =&gt; 'блок');
+                    return;
+                  }
+            
+                  const index = Number(val);
+                  if (!isNaN(index)) {
+                    this.blocks.splice(index, 1, index + 1);
+                  }
+                }
+              }
+            };
+            &lt;/script&gt;</code></pre>
+        </div>
+    </div>
+
+    <!-- Компонент: NumberSelect.vue -->
+    <div class="card mb-3 component-card">
+        <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+                <h4 class="h5 mb-1 font-monospace">components/NumberSelect.vue</h4>
+                <p class="text-muted mb-0 small">Компонент выбора номера блока или сброса значения</p>
+            </div>
+            <button class="btn btn-primary btn-sm mt-2 mt-sm-0" onclick="toggleCode('code-select', this)">Показать код</button>
+        </div>
+        <div id="code-select" class="code-block px-3 pb-3">
+            <pre><code class="language-html">&lt;template&gt;
+              &lt;select :value="modelValue" @change="onChange"&gt;
+                &lt;option disabled value=""&gt;Выберите номер&lt;/option&gt;
+                &lt;option
+                  v-for="(_, index) in total"
+                  :key="index"
+                  :value="index"
+                &gt;
+                  {{ index + 1 }}
+                &lt;/option&gt;
+                &lt;option value="reset"&gt;Сбросить&lt;/option&gt;
+              &lt;/select&gt;
+            &lt;/template&gt;
+            
+            &lt;script&gt;
+            export default {
+              name: 'NumberSelect',
+              props: {
+                modelValue: {
+                  type: [String, Number],
+                  default: ''
+                },
+                total: {
+                  type: Number,
+                  required: true
+                }
+              },
+              emits: ['update:modelValue', 'update-block'],
+              methods: {
+                onChange(event) {
+                  const val = event.target.value;
+                  this.$emit('update:modelValue', val);
+                  this.$emit('update-block', val);
+                }
+              }
+            };
+            &lt;/script&gt;</code></pre>
+        </div>
+    </div>
+
+        <!-- Компонент: BlockSquare.vue -->
+        <div class="card mb-3 component-card">
+          <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+              <div>
+                  <h4 class="h5 mb-1 font-monospace">components/BlockSquare.vue</h4>
+                  <p class="text-muted mb-0 small">Компонент для отображения отдельного блока</p>
+              </div>
+              <button class="btn btn-primary btn-sm mt-2 mt-sm-0" onclick="toggleCode('code-square', this)">Показать код</button>
+          </div>
+          <div id="code-square" class="code-block px-3 pb-3" style="display: none;">
+              <pre><code class="language-html">&lt;template&gt;
+    &lt;div class="square"&gt;
+      {{ content }}
+    &lt;/div&gt;
+  &lt;/template&gt;
+  
+  &lt;script&gt;
+  export default {
+    name: 'BlockSquare',
+    props: {
+      content: {
+        type: [String, Number],
+        required: true
+      }
+    }
+  };
+  &lt;/script&gt;</code></pre>
+          </div>
+      </div>
+</div>
+
+<!-- Prism.js (Подсветка синтаксиса) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+
+<!-- Скрипт переключения видимости кода -->
+<script src="../../js/tasks.js"></script>
+
+</body>
+</html>

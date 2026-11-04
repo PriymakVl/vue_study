@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Shapes - Vue Task (Конспект)</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+
+    <!-- Prism.js CSS (Тема Okaidia для подсветки синтаксиса Vue/HTML/CSS/JS) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css">
+
+    <link rel="stylesheet" href="../../css/tasks.css">
+</head>
+<body>
+
+<div class="container my-5">
+    <!-- Заголовок -->
+    <h1 class="text-center mb-4">Dynamic Shapes — Vue Task</h1>
+
+    <!-- Скриншот и Описание задания -->
+    <div class="row mb-4">
+        <div class="col-md-5 mb-3 mb-md-0">
+            <div class="screenshot-wrp text-center">
+                <img src="screenshots/dynamic_shapes.png" alt="Dynamic Shapes Screenshot" class="img-fluid">
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title text-primary h4">Задание</h3>
+                    <ol class="task mb-3">
+                        <li>Создать область для отображения геометрической фигуры и блок кнопок управления («Квадрат», «Круг», «Прямоугольник»).</li>
+                        <li>При клике на соответствующую кнопку изменять форму и цвет фигуры (квадрат — синий, круг — зеленый, прямоугольник — оранжевый).</li>
+                        <li>Выделять активную кнопку красным цветом текста, сбрасывая цвет остальных кнопок на стандартный.</li>
+                    </ol>
+                    <div class="d-flex flex-wrap gap-2 mt-auto">
+                        <a href="../../demo/event/dynamic_shapes/index.html" class="btn btn-outline-primary btn-sm">Демо</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="h3 mb-3 text-secondary">Решение задачи</h2>
+
+    <!-- Разметка: index.html -->
+    <div class="card mb-3 component-card">
+        <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+                <h4 class="h5 mb-1 font-monospace">index.html</h4>
+                <p class="text-muted mb-0 small">Основная HTML-разметка страницы, подключающая Vue 3, стили и элементы интерфейса</p>
+            </div>
+            <button class="btn btn-primary btn-sm mt-2 mt-sm-0" onclick="toggleCode('code-html', this)">Показать код</button>
+        </div>
+        <div id="code-html" class="code-block px-3 pb-3">
+            <pre><code class="language-html">&lt;!doctype html&gt;
+&lt;html lang="ru"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+    &lt;title&gt;Dynamic Shapes&lt;/title&gt;
+    &lt;script src="https://unpkg.com/vue@3/dist/vue.global.js"&gt;&lt;/script&gt;
+    &lt;link rel="stylesheet" href="style.css" /&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id="app"&gt;
+      &lt;div class="figure square"&gt;&lt;/div&gt;
+      &lt;div style="text-align: center"&gt;
+        &lt;button @click="setShape('square'); activeButton($event)" style="color: red"&gt;Квадрат&lt;/button&gt;
+        &lt;button @click="setShape('circle'); activeButton($event)"&gt;Круг&lt;/button&gt;
+        &lt;button @click="setShape('rectangle'); activeButton($event)"&gt;Прямоугольник&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;script src="main.js"&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        </div>
+    </div>
+
+    <!-- Стили: style.css -->
+    <div class="card mb-3 component-card">
+        <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+                <h4 class="h5 mb-1 font-monospace">style.css</h4>
+                <p class="text-muted mb-0 small">Стили фигурных блоков, кнопок управления и анимаций перехода</p>
+            </div>
+            <button class="btn btn-primary btn-sm mt-2 mt-sm-0" onclick="toggleCode('code-css', this)">Показать код</button>
+        </div>
+        <div id="code-css" class="code-block px-3 pb-3">
+            <pre><code class="language-css">.figure {
+  margin: 100px auto 50px;
+  transition: all 0.3s ease;
+}
+
+button {
+  margin: 5px;
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  color: #333;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+}
+
+.square {
+  width: 100px;
+  height: 100px;
+  background-color: blue;
+  border-radius: 0;
+}
+
+.circle {
+  width: 100px;
+  height: 100px;
+  background-color: green;
+  border-radius: 50%;
+}
+
+.rectangle {
+  width: 200px;
+  height: 100px;
+  background-color: orange;
+  border-radius: 0;
+}</code></pre>
+        </div>
+    </div>
+
+    <!-- Скрипт: main.js -->
+    <div class="card mb-3 component-card">
+        <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+                <h4 class="h5 mb-1 font-monospace">main.js</h4>
+                <p class="text-muted mb-0 small">Инициализация Vue 3 и методы для динамической смены классов и стилей кнопок</p>
+            </div>
+            <button class="btn btn-primary btn-sm mt-2 mt-sm-0" onclick="toggleCode('code-js', this)">Показать код</button>
+        </div>
+        <div id="code-js" class="code-block px-3 pb-3">
+            <pre><code class="language-javascript">const app = Vue.createApp({
+  methods: {
+    activeButton(event) {
+      document.querySelectorAll('button').forEach(btn => btn.style.color = 'black');
+      event.target.style.color = 'red';
+    },
+    setShape(shape) {
+      let figure = document.querySelector(".figure");
+
+      figure.classList.remove("square", "circle", "rectangle");
+      figure.classList.add(shape);
+    },
+  },
+});
+
+app.mount("#app");</code></pre>
+        </div>
+    </div>
+</div>
+
+<!-- Prism.js (Подсветка синтаксиса) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+
+<!-- Скрипт переключения видимости кода -->
+<script src="../../js/tasks.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue.js Использование Emit в Options API</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Highlight.js Theme (Atom One Dark) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        vue: {
+                            green: '#42b883',
+                            dark: '#35495e',
+                            light: '#42d392'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        pre code.hljs {
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-vue-green selection:text-white">
+
+    <!-- Navbar / Header -->
+    <header class="border-b border-slate-200 bg-white/90 backdrop-blur sticky top-0 z-50 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <svg class="h-8 w-8 text-vue-green" viewBox="0 0 128 128" fill="currentColor">
+                    <path fill="#42b883" d="M78.8,10L64,35.4L49.2,10H0l64,110l64-110H78.8z"/>
+                    <path fill="#35495e" d="M78.8,10L64,35.4L49.2,10H25.6L64,76l38.4-66H78.8z"/>
+                </svg>
+                <span class="font-bold text-lg tracking-tight text-slate-800">Vue.js - Использование Emit в Options API</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full bg-white rounded-2xl shadow-sm border border-slate-200 my-6">
+        
+        <!-- Section 1: Child Component -->
+        <section class="mb-12">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-vue-green font-bold font-mono shadow-sm">1</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Дочерний компонент (ChildComponent.vue)</h2>
+            </div>
+            <p class="text-slate-600 mb-4 leading-relaxed">
+                Дочерний компонент генерирует пользовательское событие при помощи встроенного метода <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">this.$emit</code> и передаёт данные родительскому компоненту.
+            </p>
+            
+            <!-- Code Block -->
+            <div class="relative group my-4 shadow-lg rounded-xl overflow-hidden border border-slate-800">
+                <pre><code class="language-xml">&lt;!-- ChildComponent.vue --&gt;
+&lt;template&gt;
+  &lt;div class="child"&gt;
+    &lt;button @click="sendNotification"&gt;
+      Отправить данные родителю
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  emits: ['custom-event'], // Явное объявление события
+  methods: {
+    sendNotification() {
+      // Генерируем событие 'custom-event' и передаём объект данных
+      this.$emit('custom-event', {
+        id: 42,
+        message: 'Данные успешно отправлены из дочернего компонента!'
+      });
+    }
+  }
+}
+&lt;/script&gt;</code></pre>
+            </div>
+
+            <!-- Detailed Explanation List -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 mt-6">
+                <ul class="space-y-3 text-slate-700 text-sm sm:text-base">
+                    <li class="flex items-start gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full bg-vue-green mt-2 flex-shrink-0"></span>
+                        <div>
+                            <strong class="font-mono text-emerald-800">emits: ['custom-event']</strong> — опция для явного объявления пользовательских событий, генерируемых компонентом. Это улучшает документирование кода и самопроверку фреймворка.
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full bg-vue-green mt-2 flex-shrink-0"></span>
+                        <div>
+                            <strong class="font-mono text-emerald-800">this.$emit('custom-event', payload)</strong> — системный метод Vue:
+                            <ul class="list-disc pl-5 mt-1 space-y-1 text-slate-600">
+                                <li><strong>Первый параметр (<code class="font-mono text-xs">'custom-event'</code>)</strong> — уникальное имя события, которое будет отлавливать родитель.</li>
+                                <li><strong>Второй параметр (<code class="font-mono text-xs">{ id: 42, message: '...' }</code>)</strong> — полезная нагрузка (payload), любые данные, передаваемые вверх по цепочке компонентов.</li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 2: Parent Component -->
+        <section class="mb-12">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-vue-green font-bold font-mono shadow-sm">2</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Родительский компонент (ParentComponent.vue)</h2>
+            </div>
+            <p class="text-slate-600 mb-4 leading-relaxed">
+                Родительский компонент подписывается на кастомные события дочернего элемента, извлекает полученные данные и обновляет свое внутреннее состояние.
+            </p>
+
+            <!-- Code Block -->
+            <div class="relative group my-4 shadow-lg rounded-xl overflow-hidden border border-slate-800">
+                <pre><code class="language-xml">&lt;!-- ParentComponent.vue --&gt;
+&lt;template&gt;
+  &lt;div class="parent"&gt;
+    &lt;!-- Подписываемся на событие @custom-event --&gt;
+    &lt;ChildComponent @custom-event="handleCustomEvent" /&gt;
+    
+    &lt;!-- Отображаем сообщение при его наличии --&gt;
+    &lt;p v-if="receivedMessage" class="message"&gt;
+      {{ receivedMessage }}
+    &lt;/p&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import ChildComponent from './ChildComponent.vue';
+
+export default {
+  components: {
+    ChildComponent
+  },
+  data() {
+    return {
+      receivedMessage: ''
+    }
+  },
+  methods: {
+    handleCustomEvent(payload) {
+      // payload содержит объект, переданный из this.$emit
+      this.receivedMessage = payload.message;
+    }
+  }
+}
+&lt;/script&gt;</code></pre>
+            </div>
+
+            <!-- Detailed Explanation List -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 mt-6">
+                <ul class="space-y-3 text-slate-700 text-sm sm:text-base">
+                    <li class="flex items-start gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full bg-vue-green mt-2 flex-shrink-0"></span>
+                        <div>
+                            <strong class="font-mono text-emerald-800">&lt;ChildComponent @custom-event="handleCustomEvent" /&gt;</strong> — вставка дочернего компонента в шаблон. 
+                            Символ <code class="font-mono bg-white border border-slate-300 px-1.5 py-0.5 rounded text-xs">@custom-event</code> подписывает родителя на событие дочернего элемента и при его наступлении автоматически вызывает метод <code class="font-mono">handleCustomEvent</code>.
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full bg-vue-green mt-2 flex-shrink-0"></span>
+                        <div>
+                            <strong class="font-mono text-emerald-800">handleCustomEvent(payload)</strong> — метод-обработчик. Аргумент <code class="font-mono">payload</code> автоматически получает данные, переданные с помощью <code class="font-mono">this.$emit</code>.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Highlighting Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            hljs.highlightAll();
+        });
+    </script>
+</body>
+</html>
