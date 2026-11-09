@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue.js — Что такое компонент</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Highlight.js Theme (Atom One Dark) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        vue: {
+                            green: '#42b883',
+                            dark: '#35495e',
+                            light: '#42d392'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        pre code.hljs {
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-vue-green selection:text-white">
+
+    <!-- Navbar / Header -->
+    <header class="border-b border-slate-200 bg-white/90 backdrop-blur sticky top-0 z-50 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <svg class="h-8 w-8 text-vue-green" viewBox="0 0 128 128" fill="currentColor">
+                    <path fill="#42b883" d="M78.8,10L64,35.4L49.2,10H0l64,110l64-110H78.8z"/>
+                    <path fill="#35495e" d="M78.8,10L64,35.4L49.2,10H25.6L64,76l38.4-66H78.8z"/>
+                </svg>
+                <span class="font-bold text-lg tracking-tight text-slate-800">Vue.js — Компоненты</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full bg-white rounded-2xl shadow-sm border border-slate-200 my-6">
+        
+        <!-- Section 1: Basic Definition -->
+        <section class="mb-12">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-vue-green font-bold font-mono shadow-sm">1</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Что такое компонент?</h2>
+            </div>
+            <p class="text-slate-600 mb-6 leading-relaxed">
+                <strong>Компонент</strong> — это модуль (самостоятельная часть сайта). Компоненты позволяют разделить сложный интерфейс на небольшие, легко управляемые и изолированные части.
+            </p>
+
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-5">
+                <h3 class="font-bold text-slate-800 mb-3">Основные особенности:</h3>
+                <ul class="space-y-3 text-slate-700 text-sm sm:text-base">
+                    <li class="flex items-start gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full bg-vue-green mt-2 flex-shrink-0"></span>
+                        <div>Создаются в отдельных файлах с расширением <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">.vue</code>.</div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full bg-vue-green mt-2 flex-shrink-0"></span>
+                        <div>Могут переиспользоваться в разных местах проекта.</div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full bg-vue-green mt-2 flex-shrink-0"></span>
+                        <div>Могут встраиваться друг в друга (имеют вложенность «родитель — ребёнок»).</div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 2: Structure -->
+        <section class="mb-12">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-vue-green font-bold font-mono shadow-sm">2</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Структура Single File Component (SFC)</h2>
+            </div>
+            <p class="text-slate-600 mb-4 leading-relaxed">
+                Каждый <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">.vue</code> файл объединяет в себе три части:
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="border border-slate-200 p-4 rounded-xl bg-slate-50">
+                    <div class="font-mono text-emerald-700 font-bold mb-1">&lt;template&gt;</div>
+                    <div class="text-sm text-slate-600">Собственная разметка и структура компонента.</div>
+                </div>
+                <div class="border border-slate-200 p-4 rounded-xl bg-slate-50">
+                    <div class="font-mono text-emerald-700 font-bold mb-1">&lt;script&gt;</div>
+                    <div class="text-sm text-slate-600">Логика и поведение компонента.</div>
+                </div>
+                <div class="border border-slate-200 p-4 rounded-xl bg-slate-50">
+                    <div class="font-mono text-emerald-700 font-bold mb-1">&lt;style&gt;</div>
+                    <div class="text-sm text-slate-600">Стили оформления.</div>
+                </div>
+            </div>
+
+            <!-- Example Code Block -->
+            <div class="relative group my-4 shadow-lg rounded-xl overflow-hidden border border-slate-800">
+                <pre><code class="language-xml">&lt;!-- components/MyButton.vue --&gt;
+&lt;template&gt;
+  &lt;button class="btn" @click="handleClick"&gt;
+    &lt;slot&gt;Нажми меня&lt;/slot&gt;
+  &lt;/button&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+const handleClick = () => {
+  console.log('Кнопка нажата!');
+};
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.btn {
+  background-color: #42b883;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+}
+&lt;/style&gt;</code></pre>
+            </div>
+        </section>
+
+        <!-- Section 3: Data Flow & Communication -->
+        <section class="mb-12">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-vue-green font-bold font-mono shadow-sm">3</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Односторонний поток данных</h2>
+            </div>
+            <p class="text-slate-600 mb-4 leading-relaxed">
+                Vue придерживается концепции <strong>одностороннего потока данных</strong> (One-Way Data Flow), что делает состояние приложения предсказуемым и легко контролируемым.
+            </p>
+
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 mb-6">
+                <div class="flex flex-col sm:flex-row items-center justify-around gap-4 text-center">
+                    <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm w-full sm:w-auto">
+                        <span class="font-bold text-slate-800">Parent (Родитель)</span>
+                    </div>
+                    <div class="flex flex-col items-center text-xs font-mono text-emerald-800">
+                        <span>props &rarr; (входные параметры)</span>
+                        <span class="my-1 text-slate-400">&larr; &rarr;</span>
+                        <span>&larr; emit (события)</span>
+                    </div>
+                    <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm w-full sm:w-auto">
+                        <span class="font-bold text-slate-800">Child (Дочерний)</span>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="space-y-3 text-slate-700 text-sm sm:text-base">
+                <li class="flex items-start gap-2">
+                    <span class="inline-block w-2 h-2 rounded-full bg-vue-green mt-2 flex-shrink-0"></span>
+                    <div>
+                        <strong class="font-mono text-emerald-800">props</strong> — передача данных от родительского компонента к дочернему.
+                    </div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="inline-block w-2 h-2 rounded-full bg-vue-green mt-2 flex-shrink-0"></span>
+                    <div>
+                        <strong class="font-mono text-emerald-800">events / emit</strong> — отправка событий и данных от дочернего компонента к родительскому.
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Section 4: Types & Structure -->
+        <section class="mb-6">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-vue-green font-bold font-mono shadow-sm">4</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Типы компонентов и структура проекта</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="border border-slate-200 p-5 rounded-xl bg-slate-50">
+                    <h3 class="font-bold text-slate-800 mb-2">Виды компонентов:</h3>
+                    <ul class="space-y-2 text-sm text-slate-600">
+                        <li><strong>Локальные:</strong> используются только внутри конкретного компонента.</li>
+                        <li><strong>Глобальные:</strong> регистрируются один раз при старте приложения и доступны повсеместно.</li>
+                    </ul>
+                    
+                    <h3 class="font-bold text-slate-800 mt-4 mb-2">Примеры компонентов:</h3>
+                    <div class="flex flex-wrap gap-2 text-xs font-mono">
+                        <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded">Кнопка</span>
+                        <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded">Меню</span>
+                        <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded">Карточка товара</span>
+                        <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded">Комментарий</span>
+                    </div>
+                </div>
+
+                <div class="border border-slate-200 p-5 rounded-xl bg-slate-50">
+                    <h3 class="font-bold text-slate-800 mb-2">Структура папок приложения:</h3>
+                    <p class="text-sm text-slate-600 mb-3">Обычно компоненты хранятся в директории <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">src/components/</code>:</p>
+                    <div class="relative group shadow-md rounded-xl overflow-hidden border border-slate-800">
+                        <pre><code class="language-plaintext">project/
+├── src/
+│   ├── components/
+│   │   └── MyButton.vue
+│   ├── App.vue
+│   └── main.js</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Highlighting Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            hljs.highlightAll();
+        });
+    </script>
+</body>
+</html>

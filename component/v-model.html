@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue.js — Использование v-model для компонентов</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Highlight.js Theme (Atom One Dark) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        vue: {
+                            green: '#42b883',
+                            dark: '#35495e',
+                            light: '#42d392'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        pre code.hljs {
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-vue-green selection:text-white">
+
+    <!-- Navbar / Header -->
+    <header class="border-b border-slate-200 bg-white/90 backdrop-blur sticky top-0 z-50 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <svg class="h-8 w-8 text-vue-green" viewBox="0 0 128 128" fill="currentColor">
+                    <path fill="#42b883" d="M78.8,10L64,35.4L49.2,10H0l64,110l64-110H78.8z"/>
+                    <path fill="#35495e" d="M78.8,10L64,35.4L49.2,10H25.6L64,76l38.4-66H78.8z"/>
+                </svg>
+                <span class="font-bold text-lg tracking-tight text-slate-800">Vue.js — Использование v-model для компонентов</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full bg-white rounded-2xl shadow-sm border border-slate-200 my-6">
+        
+        <!-- Intro Banner -->
+        <div class="mb-10 bg-emerald-50/60 border border-emerald-100 rounded-2xl p-6">
+            <h1 class="text-2xl font-bold text-slate-800 mb-2">Применение v-model для компонентов</h1>
+            <p class="text-slate-600 leading-relaxed">
+                Во Vue 3 можно использовать директиву <code class="text-emerald-700 font-mono bg-emerald-100/60 border border-emerald-200 px-2 py-0.5 rounded">v-model</code> для собственных компонентов. Это позволяет организовать двустороннюю передачу данных между родительским и дочерним компонентами.
+            </p>
+        </div>
+
+        <!-- Section 1: Parent Component -->
+        <section class="mb-12">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-vue-green font-bold font-mono shadow-sm">1</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Родительский компонент (App.vue)</h2>
+            </div>
+
+            <!-- Code Block -->
+            <div class="relative group my-4 shadow-lg rounded-xl overflow-hidden border border-slate-800">
+                <pre><code class="language-xml">&lt;script&gt;
+import MyInput from './MyInput.vue'
+
+export default {
+  components: {
+    MyInput
+  },
+  data() {
+    return {
+      message: 'Привет'
+    }
+  }
+}
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;MyInput v-model="message" /&gt;
+  &lt;p&gt;{{ message }}&lt;/p&gt;
+&lt;/template&gt;</code></pre>
+            </div>
+        </section>
+
+        <!-- Section 2: Child Component -->
+        <section class="mb-12">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-vue-green font-bold font-mono shadow-sm">2</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Дочерний компонент (MyInput.vue)</h2>
+            </div>
+
+            <!-- Code Block -->
+            <div class="relative group my-4 shadow-lg rounded-xl overflow-hidden border border-slate-800">
+                <pre><code class="language-xml">&lt;script&gt;
+export default {
+  props: ['modelValue'],
+  emits: ['update:modelValue']
+}
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;input
+    :value="modelValue"
+    @input="$emit('update:modelValue', $event.target.value)"
+  &gt;
+&lt;/template&gt;</code></pre>
+            </div>
+        </section>
+
+        <!-- Section 3: How it Works -->
+        <section class="mb-12">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-vue-green font-bold font-mono shadow-sm">3</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Как это работает?</h2>
+            </div>
+            
+            <p class="text-slate-600 mb-4 leading-relaxed">
+                Запись <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">&lt;MyInput v-model="message" /&gt;</code> преобразуется компилятором Vue примерно в следующий код:
+            </p>
+
+            <!-- Code Block -->
+            <div class="relative group my-4 shadow-lg rounded-xl overflow-hidden border border-slate-800">
+                <pre><code class="language-xml">&lt;MyInput
+  :modelValue="message"
+  @update:modelValue="message = $event"
+/&gt;</code></pre>
+            </div>
+
+            <!-- Detailed Explanation List -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 mt-6">
+                <ul class="space-y-3 text-slate-700 text-sm sm:text-base">
+                    <li class="flex items-start gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full bg-vue-green mt-2 flex-shrink-0"></span>
+                        <div>
+                            <strong class="font-mono text-emerald-800">modelValue</strong> — передаёт текущее значение из родительского компонента в дочерний через пропс.
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full bg-vue-green mt-2 flex-shrink-0"></span>
+                        <div>
+                            <strong class="font-mono text-emerald-800">update:modelValue</strong> — эмитирует событие с новым значением обратно родителю при изменении ввода.
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full bg-vue-green mt-2 flex-shrink-0"></span>
+                        <div>
+                            <strong class="font-mono text-emerald-800">Реактивное обновление</strong> — родительский компонент перехватывает событие и автоматически обновляет свою переменную <code class="font-mono text-xs">message</code>.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 4: Multiple v-model -->
+        <section class="mb-6">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-vue-green font-bold font-mono shadow-sm">4</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Можно ли использовать несколько v-model?</h2>
+            </div>
+            
+            <p class="text-slate-600 mb-4 leading-relaxed">
+                Да, Vue 3 поддерживает привязку нескольких <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">v-model</code> к одному компоненту с помощью именованных аргументов:
+            </p>
+
+            <!-- Code Block -->
+            <div class="relative group my-4 shadow-lg rounded-xl overflow-hidden border border-slate-800">
+                <pre><code class="language-xml">&lt;UserForm
+  v-model:name="userName"
+  v-model:age="userAge"
+/&gt;</code></pre>
+            </div>
+
+            <p class="text-slate-600 my-4 leading-relaxed">
+                В дочернем компоненте используются соответствующие пропсы и события:
+            </p>
+
+            <!-- Detailed Explanation List -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-5">
+                <ul class="space-y-3 text-slate-700 text-sm sm:text-base">
+                    <li class="flex items-start gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full bg-vue-green mt-2 flex-shrink-0"></span>
+                        <div>
+                            Пропс <code class="font-mono text-xs text-emerald-800 font-semibold">name</code> и событие <code class="font-mono text-xs text-emerald-800 font-semibold">update:name</code>.
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full bg-vue-green mt-2 flex-shrink-0"></span>
+                        <div>
+                            Пропс <code class="font-mono text-xs text-emerald-800 font-semibold">age</code> и событие <code class="font-mono text-xs text-emerald-800 font-semibold">update:age</code>.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Summary Box -->
+            <div class="mt-6 p-4 rounded-xl bg-emerald-50 border-l-4 border-vue-green text-slate-700 text-sm sm:text-base">
+                <strong class="text-emerald-900">Главный вывод:</strong> <code class="font-mono text-xs bg-white px-1.5 py-0.5 rounded border border-emerald-200">v-model</code> на пользовательском компоненте — это удобная синтаксическая обёртка над комбинацией <code class="font-mono text-xs bg-white px-1.5 py-0.5 rounded border border-emerald-200">props</code> и <code class="font-mono text-xs bg-white px-1.5 py-0.5 rounded border border-emerald-200">emit</code>, обеспечивающая полноценную двустороннюю связь.
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Highlighting Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            hljs.highlightAll();
+        });
+    </script>
+</body>
+</html>

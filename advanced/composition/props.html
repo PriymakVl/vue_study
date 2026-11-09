@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue.js — Передача данных через Props</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Highlight.js Theme (Atom One Dark) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        vue: {
+                            green: '#42b883',
+                            dark: '#35495e',
+                            light: '#42d392'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        pre code.hljs {
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-vue-green selection:text-white">
+
+    <!-- Navbar / Header -->
+    <header class="border-b border-slate-200 bg-white/90 backdrop-blur sticky top-0 z-50 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <svg class="h-8 w-8 text-vue-green" viewBox="0 0 128 128" fill="currentColor">
+                    <path fill="#42b883" d="M78.8,10L64,35.4L49.2,10H0l64,110l64-110H78.8z"/>
+                    <path fill="#35495e" d="M78.8,10L64,35.4L49.2,10H25.6L64,76l38.4-66H78.8z"/>
+                </svg>
+                <span class="font-bold text-lg tracking-tight text-slate-800">Vue.js — Props (`script setup`)</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full bg-white rounded-2xl shadow-sm border border-slate-200 my-6">
+        
+        <!-- Section 1: Data Transfer Overview -->
+        <section class="mb-12">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-vue-green font-bold font-mono shadow-sm">1</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Передача данных от родителя к дочернему компоненту</h2>
+            </div>
+            <p class="text-slate-600 mb-6 leading-relaxed">
+                В синтаксисе <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">&lt;script setup&gt;</code> родительский компонент передает данные через атрибуты с директивой <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">v-bind</code> (или сокращение <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">:</code>).
+            </p>
+
+            <!-- Code Example Parent -->
+            <div class="mb-4">
+                <h3 class="font-bold text-slate-800 mb-2">Передача данных из родительского компонента:</h3>
+                <div class="relative group shadow-lg rounded-xl overflow-hidden border border-slate-800">
+                    <pre><code class="language-xml">&lt;!-- ParentComponent.vue --&gt;
+&lt;template&gt;
+  &lt;ChildComponent :title="postTitle" /&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { ref } from 'vue';
+import ChildComponent from './ChildComponent.vue';
+
+const postTitle = ref('Заголовок статьи');
+&lt;/script&gt;</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Receiving Props with defineProps -->
+        <section class="mb-12">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-vue-green font-bold font-mono shadow-sm">2</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Приём props через defineProps()</h2>
+            </div>
+            <p class="text-slate-600 mb-4 leading-relaxed">
+                Для объявления пропсов в <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">&lt;script setup&gt;</code> используется макрос <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">defineProps()</code>, который не требует дополнительного импорта.
+            </p>
+
+            <!-- Code Example Child -->
+            <div class="relative group my-4 shadow-lg rounded-xl overflow-hidden border border-slate-800">
+                <pre><code class="language-xml">&lt;!-- ChildComponent.vue --&gt;
+&lt;template&gt;
+  &lt;h1&gt;{{ title }}&lt;/h1&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+defineProps({
+  title: {
+    type: String,
+    required: true
+  }
+});
+&lt;/script&gt;</code></pre>
+            </div>
+        </section>
+
+        <!-- Section 3: Properties Explanation -->
+        <section class="mb-6">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-vue-green font-bold font-mono shadow-sm">3</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Параметры валидации props</h2>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-5">
+                <ul class="space-y-4 text-slate-700 text-sm sm:text-base">
+                    <li class="flex items-start gap-3">
+                        <span class="flex items-center justify-center w-6 h-6 rounded bg-emerald-100 text-vue-green font-bold font-mono text-xs mt-0.5 flex-shrink-0">1</span>
+                        <div>
+                            <strong class="font-mono text-emerald-800">type</strong> — определяет тип данных, который ожидает компонент (например, <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">String</code>, <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">Number</code>, <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">Boolean</code>, <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">Array</code>, <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">Object</code>).
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="flex items-center justify-center w-6 h-6 rounded bg-emerald-100 text-vue-green font-bold font-mono text-xs mt-0.5 flex-shrink-0">2</span>
+                        <div>
+                            <strong class="font-mono text-emerald-800">required: true</strong> — указывает, что prop является обязательным для передачи из родительского компонента.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Highlighting Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            hljs.highlightAll();
+        });
+    </script>
+</body>
+</html>
