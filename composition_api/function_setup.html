@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue.js Composition API — Функция setup()</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Highlight.js Theme (Atom One Dark) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        vue: {
+                            green: '#42b883',
+                            dark: '#35495e',
+                            light: '#42d392'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        pre code.hljs {
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-vue-green selection:text-white">
+
+    <!-- Navbar / Header -->
+    <header class="border-b border-slate-200 bg-white/90 backdrop-blur sticky top-0 z-50 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <svg class="h-8 w-8 text-vue-green" viewBox="0 0 128 128" fill="currentColor">
+                    <path fill="#42b883" d="M78.8,10L64,35.4L49.2,10H0l64,110l64-110H78.8z"/>
+                    <path fill="#35495e" d="M78.8,10L64,35.4L49.2,10H25.6L64,76l38.4-66H78.8z"/>
+                </svg>
+                <span class="font-bold text-lg tracking-tight text-slate-800">Vue.js Composition API — Функция setup()</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full bg-white rounded-2xl shadow-sm border border-slate-200 my-6">
+        
+        <!-- Section 1: Purpose and Return -->
+        <section class="mb-4">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-vue-green font-bold font-mono shadow-sm">1</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Назначение и возврат данных из setup()</h2>
+            </div>
+
+            <ol class="list-decimal list-inside space-y-3 text-slate-600 mb-6 leading-relaxed marker:text-vue-green marker:font-bold marker:font-mono">
+                <li>
+                    Функция <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">setup()</code> — это главная точка входа для использования Composition API внутри компонента Vue.
+                </li>
+                <li>
+                    В ней группируется логика компонента: объявление данных, вспомогательных переменных, функций и обработчиков событий.
+                </li>
+                <li>
+                    Любые переменные и функции, объявленные внутри <code class="font-mono text-slate-800">setup()</code>, остаются локальными и доступны в шаблоне <code class="font-mono text-slate-800">&lt;template&gt;</code> <strong>только после явного возврата</strong> в виде свойств объекта <code class="font-mono text-slate-800">return { ... }</code>.
+                </li>
+            </ol>
+            
+            <!-- Code Block -->
+            <div class="relative group my-4 shadow-lg rounded-xl overflow-hidden border border-slate-800">
+                <pre><code class="language-html">&lt;!-- UserCard.vue --&gt;
+&lt;template&gt;
+  &lt;div class="card"&gt;
+    &lt;h3&gt;{{ title }}&lt;/h3&gt;
+    &lt;p&gt;Роль: {{ role }}&lt;/p&gt;
+    &lt;button @click="logInfo"&gt;Показать в консоли&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  name: 'UserCard',
+  setup() {
+    // 1. Локальная переменная (не передается в шаблон)
+    const secretCode = 'ID-9482';
+
+    // 2. Данные для отображения в шаблоне
+    const title = 'Профиль разработчика';
+    const role = 'Frontend Engineer';
+
+    // 3. Метод-обработчик
+    const logInfo = () => {
+      console.log(`Карточка: ${title}, внутренний код: ${secretCode}`);
+    };
+
+    // 4. Возвращаем только то, что нужно шаблону
+    return {
+      title,
+      role,
+      logInfo
+    };
+  }
+}
+&lt;/script&gt;</code></pre>
+            </div>
+
+            <!-- Detailed Explanation List -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 mt-6">
+                <ol class="list-decimal list-inside space-y-3 text-slate-700 text-sm sm:text-base marker:text-vue-green marker:font-bold marker:font-mono">
+                    <li class="leading-relaxed">
+                        <strong class="font-mono text-emerald-800">Инкапсуляция логики</strong> — переменная <code class="font-mono text-slate-800">secretCode</code> не включена в <code class="font-mono text-slate-800">return</code>, поэтому она доступна внутри функции <code class="font-mono text-slate-800">logInfo</code>, но скрыта от шаблона.
+                    </li>
+                    <li class="leading-relaxed">
+                        <strong class="font-mono text-emerald-800">return { title, role, logInfo }</strong> — формирует публичный интерфейс компонента для <code class="font-mono text-slate-800">&lt;template&gt;</code> и других опций компонента.
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Highlighting Script -->
+    <script>
+        if (window.hljs) {
+            hljs.highlightAll();
+        }
+    </script>
+</body>
+</html>

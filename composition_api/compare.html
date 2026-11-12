@@ -55,7 +55,7 @@
                     <path fill="#42b883" d="M78.8,10L64,35.4L49.2,10H0l64,110l64-110H78.8z"/>
                     <path fill="#35495e" d="M78.8,10L64,35.4L49.2,10H25.6L64,76l38.4-66H78.8z"/>
                 </svg>
-                <span class="font-bold text-lg tracking-tight text-slate-800">Vue.js Composition API — Реактивность</span>
+                <span class="font-bold text-lg tracking-tight text-slate-800">Vue.js - Options API vs Composition API </span>
             </div>
         </div>
     </header>
@@ -63,33 +63,8 @@
     <!-- Main Content -->
     <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full bg-white rounded-2xl shadow-sm border border-slate-200 my-6">
         
-        <!-- Section 1: Concept -->
-        <section class="mb-12">
-            <div class="flex items-center gap-3 mb-4">
-                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-vue-green font-bold font-mono shadow-sm">1</span>
-                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Все ли переменные реактивны во Vue?</h2>
-            </div>
-            <p class="text-slate-600 mb-4 leading-relaxed">
-                <strong>Нет, не все.</strong> Реактивными являются только те переменные, которые явно объявлены через специальные функции или свойства фреймворка. Изменение обычных переменных JavaScript не отслеживается Vue и не вызывает обновление интерфейса (DOM).
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-                <div class="bg-rose-50 border border-rose-200 p-4 rounded-xl">
-                    <h3 class="font-bold text-rose-800 mb-2">Обычная переменная (НЕ реактивна)</h3>
-                    <code class="block font-mono text-xs text-rose-900 bg-white p-2 rounded border border-rose-200">let count = 0; count++;</code>
-                    <p class="text-xs text-rose-700 mt-2">Значение изменится в памяти JS, но DOM на странице не обновится.</p>
-                </div>
-
-                <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl">
-                    <h3 class="font-bold text-emerald-800 mb-2">Реактивная переменная (Реактивна)</h3>
-                    <code class="block font-mono text-xs text-emerald-900 bg-white p-2 rounded border border-emerald-200">const count = ref(0); count.value++;</code>
-                    <p class="text-xs text-emerald-700 mt-2">Vue отследит изменение и автоматически перерисует связанные элементы DOM.</p>
-                </div>
-            </div>
-        </section>
-
         <!-- Section 2: Options vs Composition -->
-        <section class="mb-12">
+        <section>
             <div class="flex items-center gap-3 mb-4">
                 <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-vue-green font-bold font-mono shadow-sm">2</span>
                 <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Сравнение: Options API (data) vs Composition API (setup)</h2>
