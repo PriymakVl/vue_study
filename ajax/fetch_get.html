@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue.js Composition API — Получение данных (GET) через fetch()</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Highlight.js Theme (Atom One Dark) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        vue: {
+                            green: '#42b883',
+                            dark: '#35495e',
+                            light: '#42d392'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        pre code.hljs {
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-vue-green selection:text-white">
+
+    <!-- Navbar / Header -->
+    <header class="border-b border-slate-200 bg-white/90 backdrop-blur sticky top-0 z-50 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <svg class="h-8 w-8 text-vue-green" viewBox="0 0 128 128" fill="currentColor">
+                    <path fill="#42b883" d="M78.8,10L64,35.4L49.2,10H0l64,110l64-110H78.8z"/>
+                    <path fill="#35495e" d="M78.8,10L64,35.4L49.2,10H25.6L64,76l38.4-66H78.8z"/>
+                </svg>
+                <span class="font-bold text-lg tracking-tight text-slate-800">Vue.js Composition API — Получение данных (GET) через fetch()</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full bg-white rounded-2xl shadow-sm border border-slate-200 my-6">
+        
+        <!-- Section 1: GET Request on Mount -->
+        <section class="mb-4">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-vue-green font-bold font-mono shadow-sm">1</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Получение данных (GET) и передача в дочерний компонент</h2>
+            </div>
+
+            <ol class="list-decimal list-inside space-y-3 text-slate-600 mb-6 leading-relaxed marker:text-vue-green marker:font-bold marker:font-mono">
+                <li>
+                    Для работы с асинхронными запросами в <code class="text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">&lt;script setup&gt;</code> используются реактивные переменные <code class="font-mono text-slate-800">ref()</code> для хранения данных, состояния загрузки (<code class="font-mono text-slate-800">isLoading</code>) и текста ошибки (<code class="font-mono text-slate-800">error</code>).
+                </li>
+                <li>
+                    Чтобы загрузить данные автоматически при открытии страницы, вызов функции с <code class="font-mono text-slate-800">fetch()</code> помещают внутрь хука жизненного цикла <code class="font-mono text-slate-800">onMounted()</code>.
+                </li>
+                <li>
+                    Метод <code class="font-mono text-slate-800">fetch()</code> не считает HTTP-ошибки (например, <code class="font-mono text-slate-800">404</code> или <code class="font-mono text-slate-800">500</code>) исключением, поэтому статус ответа проверяют вручную через <code class="font-mono text-slate-800">response.ok</code>.
+                </li>
+            </ol>
+            
+            <!-- Code Block: App.vue -->
+            <div class="relative group my-4 shadow-lg rounded-xl overflow-hidden border border-slate-800">
+                <pre><code class="language-html">&lt;!-- src/App.vue --&gt;
+&lt;template&gt;
+  &lt;div class="container"&gt;
+    &lt;h2&gt;Список пользователей&lt;/h2&gt;
+    &lt;button @click="loadUsers" :disabled="isLoading"&gt;Обновить&lt;/button&gt;
+
+    &lt;p v-if="isLoading"&gt;Загрузка данных...&lt;/p&gt;
+    &lt;p v-else-if="error" class="error"&gt;Ошибка: {{ error }}&lt;/p&gt;
+
+    &lt;div v-else class="grid"&gt;
+      &lt;UserItem
+        v-for="user in users"
+        :key="user.id"
+        :user="user"
+      /&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { ref, onMounted } from 'vue';
+import UserItem from './components/UserItem.vue';
+
+const users = ref([]);
+const isLoading = ref(false);
+const error = ref(null);
+
+const loadUsers = async () => {
+  isLoading.value = true;
+  error.value = null;
+
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/users');
+    if (!response.ok) {
+      throw new Error(`HTTP ошибка: ${response.status}`);
+    }
+    users.value = await response.json();
+  } catch (err) {
+    error.value = err.message;
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+onMounted(() => {
+  loadUsers();
+});
+&lt;/script&gt;</code></pre>
+            </div>
+
+            <!-- Code Block: UserItem.vue -->
+            <div class="relative group my-4 shadow-lg rounded-xl overflow-hidden border border-slate-800">
+                <pre><code class="language-html">&lt;!-- src/components/UserItem.vue --&gt;
+&lt;template&gt;
+  &lt;div class="user-card"&gt;
+    &lt;h3&gt;{{ user.name }}&lt;/h3&gt;
+    &lt;p&gt;Email: {{ user.email }}&lt;/p&gt;
+    &lt;p&gt;Город: {{ user.address.city }}&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+defineProps({
+  user: {
+    type: Object,
+    required: true
+  }
+});
+&lt;/script&gt;</code></pre>
+            </div>
+
+            <!-- Detailed Explanation List -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 mt-6">
+                <ol class="list-decimal list-inside space-y-3 text-slate-700 text-sm sm:text-base marker:text-vue-green marker:font-bold marker:font-mono">
+                    <li class="leading-relaxed">
+                        <strong class="font-mono text-emerald-800">try / catch / finally</strong> — блок <code class="font-mono text-slate-800">finally</code> гарантированно выключает индикатор <code class="font-mono text-slate-800">isLoading</code> как при успешном ответе, так и при обрыве сети.
+                    </li>
+                    <li class="leading-relaxed">
+                        <strong class="font-mono text-emerald-800">Компонентный подход</strong> — родительский компонент <code class="font-mono text-slate-800">App.vue</code> отвечает за загрузку данных, а дочерний <code class="font-mono text-slate-800">UserItem.vue</code> получает готовый объект через <code class="font-mono text-slate-800">defineProps</code> и отвечает только за отображение.
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Highlighting Script -->
+    <script>
+        if (window.hljs) {
+            hljs.highlightAll();
+        }
+    </script>
+</body>
+</html>
